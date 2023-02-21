@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -19,6 +18,7 @@ import java.util.Set;
 public class Order extends BaseEntity{
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
     private UserPaymentMethod userPaymentMethod;
 
     @Size(max = 105)
@@ -28,7 +28,7 @@ public class Order extends BaseEntity{
 
     @NotNull
     @Column(name = "consignee_phone", nullable = false)
-    private Integer consigneePhone;
+    private String consigneePhone;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -48,4 +48,8 @@ public class Order extends BaseEntity{
     @OneToMany(mappedBy = "order")
     @JsonIgnore
     private Set<OrderDetail> orderDetails;
+
+    public Order(Long orderId) {
+        this.setId(orderId);
+    }
 }
