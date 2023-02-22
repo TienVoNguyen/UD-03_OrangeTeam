@@ -1,4 +1,4 @@
-import { ext, regex, required } from 'vee-validate/dist/rules'
+import { ext, regex, required, mimes, image, size } from 'vee-validate/dist/rules'
 import { extend } from 'vee-validate'
 
 extend('required', {
@@ -16,6 +16,21 @@ extend('ext', {
 extend('regex', {
   ...regex,
   message: ' không đúng định dạng'
+})
+
+extend('mimes', {
+  ...mimes,
+  message: ' không đúng định dạng'
+})
+
+extend('image', {
+  ...image,
+  message: ' không đúng định dạng'
+})
+
+extend('size', {
+  ...size,
+  message: ` phải nhỏ hơn {size}kb`
 })
 extend('max', {
   validate(value, args) {

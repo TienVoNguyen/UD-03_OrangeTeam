@@ -21,7 +21,6 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
-
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
@@ -34,6 +33,7 @@ Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 
 Vue.use(VueCookies)
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -49,7 +49,7 @@ if (process.env.NODE_ENV === 'production') {
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
-  locale: viLang // 如果使用中文，无需设置，请删除
+  locale: viLang
 })
 
 // register global utility filters

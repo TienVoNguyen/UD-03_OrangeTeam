@@ -1,1 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0e6ca6"],{"99f6":function(n,e,r){"use strict";r.r(e);var t=function(){var n=this,e=n._self._c;return e("router-view")},u=[],a={name:"ConfigParameterKHDN"},c=a,o=r("2877"),i=Object(o["a"])(c,t,u,!1,null,null,null);e["default"]=i.exports}}]);
