@@ -1,0 +1,24 @@
+diff a/src/router/index.js b/src/router/index.js	(rejected hunks)
+@@ -60 +60 @@ export const constantRoutes = [
+-      path: '/login',
++    path: '/login',
+@@ -80,2 +80 @@ export const constantRoutes = [
+-
+-  /*{
++  /* {
+@@ -86,3 +84,0 @@ export const constantRoutes = [
+-
+-
+-
+@@ -101,3 +97 @@ export const constantRoutes = [
+-
+-
+-      /*START BIBO*/
++      /* START BIBO*/
+@@ -107,4 +101,2 @@ export const constantRoutes = [
+-        component: () => import('@/views/reports/report-failover/report-failover-by-month'),
+-      },
+-
+-      /*END BIBO*/
++        component: () => import('@/views/reports/report-failover/report-failover-by-month')
++      }

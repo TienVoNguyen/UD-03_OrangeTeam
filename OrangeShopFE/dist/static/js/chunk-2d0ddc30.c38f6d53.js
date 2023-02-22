@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0ddc30"],{8387:function(n,t,e){"use strict";e.r(t);var u=function(){var n=this,t=n._self._c;return t("router-view")},s=[],c={name:"CtckCustomersList"},r=c,o=e("2877"),i=Object(o["a"])(r,u,s,!1,null,null,null);t["default"]=i.exports}}]);

@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0d7495"],{"75bc":function(e,n,u){"use strict";u.r(n);var c=function(){var e=this,n=e._self._c;return n("router-view")},r=[],t={name:"ProcedureLayout"},o=t,a=u("2877"),s=Object(a["a"])(o,c,r,!1,null,"38f65c53",null);n["default"]=s.exports}}]);
