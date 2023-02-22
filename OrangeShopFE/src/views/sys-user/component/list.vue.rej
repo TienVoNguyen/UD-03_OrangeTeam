@@ -1,7 +1,0 @@
-diff a/src/views/sys-user/component/list.vue b/src/views/sys-user/component/list.vue	(rejected hunks)
-@@ -194 +194 @@ export default {
--  name: 'User', //Mã màn hình trong khi tạo menu
-+  name: 'User', // Mã màn hình trong khi tạo menu
-@@ -365 +365 @@ export default {
--        console.log(this.users);
-+        console.log(this.users)
