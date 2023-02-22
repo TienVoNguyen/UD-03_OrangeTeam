@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0a519f"],{"08ef":function(t,e,n){"use strict";n.r(e);var a=function(){var t=this,e=t._self._c;return e("article-detail",{attrs:{"is-edit":!0}})},i=[],l=n("1172"),c={name:"EditForm",components:{ArticleDetail:l["a"]}},r=c,s=n("2877"),o=Object(s["a"])(r,a,i,!1,null,null,null);e["default"]=o.exports}}]);

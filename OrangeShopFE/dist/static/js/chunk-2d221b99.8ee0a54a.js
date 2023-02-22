@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d221b99"],{cc25:function(n,e,u){"use strict";u.r(e);var c=function(){var n=this,e=n._self._c;return e("router-view")},t=[],l={name:"TPBankRule"},r=l,a=u("2877"),o=Object(a["a"])(r,c,t,!1,null,null,null);e["default"]=o.exports}}]);

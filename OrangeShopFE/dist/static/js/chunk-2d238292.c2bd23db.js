@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d238292"],{fdca:function(n,e,a){"use strict";a.r(e);var c=function(){var n=this,e=n._self._c;return e("router-view")},t=[],u={name:"ScaleClassification"},i=u,l=a("2877"),s=Object(l["a"])(i,c,t,!1,null,null,null);e["default"]=s.exports}}]);

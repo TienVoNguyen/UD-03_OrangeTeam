@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0d0281"],{"677a":function(n,e,u){"use strict";u.r(e);var l=function(){var n=this,e=n._self._c;return e("router-view")},o=[],r={name:"SingleScoringModelKHDN"},t=r,c=u("2877"),i=Object(c["a"])(t,l,o,!1,null,null,null);e["default"]=i.exports}}]);
