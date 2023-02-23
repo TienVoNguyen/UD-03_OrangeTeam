@@ -1,0 +1,6 @@
+diff a/src/router/modules/setting.js b/src/router/modules/setting.js	(rejected hunks)
+@@ -19,2 +19,2 @@ export default {
+-  //'bibo-test' => là mã màn hình => từ mã màn hình này có thể lấy ra được path url
+-  'bibo-test': () => import('@/views/reports/report-failover/report-failover-by-month'),
++  // 'bibo-test' => là mã màn hình => từ mã màn hình này có thể lấy ra được path url
++  'bibo-test': () => import('@/views/reports/report-failover/report-failover-by-month')

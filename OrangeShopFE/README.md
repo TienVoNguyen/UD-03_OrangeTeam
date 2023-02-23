@@ -1,24 +1,34 @@
-# default-app
-
-## Project setup
-```
+# Sanvadio Shop
+## install dependency
+```bash
 npm install
 ```
+## develop
+```bash
+npm run dev
+```
+## Build
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+```bash
+# build for test environment
+npm run build:stage
+
+# build for production environment
+npm run build:prod
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Advanced
 
-### Lints and fixes files
-```
+```bash
+# preview the release environment effect
+npm run preview
+
+# preview the release environment effect + static resource analysis
+npm run preview -- --report
+
+# code format check
 npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# code format check and auto fix
+npm run lint -- --fix
+```
