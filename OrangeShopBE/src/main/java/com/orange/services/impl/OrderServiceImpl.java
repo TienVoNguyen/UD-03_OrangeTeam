@@ -10,6 +10,7 @@ import com.orange.domain.dto.OrderDTO;
 import com.orange.repositories.IOrderDetailRepository;
 import com.orange.repositories.IOrderRepository;
 import com.orange.services.IOrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,20 +20,14 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements IOrderService {
 
-    private IOrderRepository orderRepository;
-    private IOrderDetailRepository orderDetailRepository;
-    private IOrderMapper  orderMapper;
+    private final IOrderRepository orderRepository;
+    private final IOrderDetailRepository orderDetailRepository;
+    private final IOrderMapper  orderMapper;
+    private final IOrderViewMapper orderViewMapper;
 
-    private IOrderViewMapper orderViewMapper;
-
-    public OrderServiceImpl(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IOrderMapper orderMapper, IOrderViewMapper orderViewMapper) {
-        this.orderRepository = orderRepository;
-        this.orderDetailRepository = orderDetailRepository;
-        this.orderMapper = orderMapper;
-        this.orderViewMapper = orderViewMapper;
-    }
 
     @Override
     public OrderDTO create(OrderDTO dto) {
@@ -46,6 +41,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public OrderDTO update(OrderDTO dto) {
+
         return null;
     }
 
@@ -67,7 +63,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public OrderDTO fillById(Long id) {
+    public OrderDTO findById(Long id) {
         Order order = this.orderRepository.findById(id).orElse(null);
         if (order == null) {
             throw new EntityNotFoundException("Order not found!");

@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.util.Set;
 
-@Data
+@Data @Deprecated
 public class ProductContainProductDetailDTO {
     private ProductDTO product;
     private Set<ProductDetailDTO> productDetails;
