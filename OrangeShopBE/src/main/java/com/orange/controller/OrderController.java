@@ -1,11 +1,13 @@
 package com.orange.controller;
 
-import com.orange.exception.EntityIsEmptyException;
+import com.orange.common.payload.Result;
 import com.orange.domain.dto.OrderDTO;
+import com.orange.exception.EntityIsEmptyException;
 import com.orange.services.IOrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -13,33 +15,31 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @RequestMapping("/test/order")
+@RequiredArgsConstructor
 public class OrderController {
 
     private final IOrderService orderService;
 
-    public OrderController(IOrderService orderService) {
-        this.orderService = orderService;
-    }
-
     @GetMapping("")
-    public ResponseEntity<?> getAllOrders(@RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "20") int size){
+    public Result<?> getAllOrders(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "20") int size){
         Page<?> pages = this.orderService.fillAll(PageRequest.of(page, size));
-        return ResponseEntity.ok().body(pages);
+        return Result.result(HttpStatus.OK.value(), "Lấy danh sách các order thành công", pages);
     }
 
     @GetMapping("/order-detail")
-    public ResponseEntity<?> getOrderById(@RequestParam(value = "id", defaultValue = "0") Optional<Long> id){
-        if (!id.isPresent()){
-            throw new EntityIsEmptyException("Id is empty!");
+    public Result<?> getOrderById(@RequestParam(value = "id", defaultValue = "0") Optional<Long> id){
+        if (id.isPresent()) {
+            OrderDTO orderDTO = this.orderService.fillById(id.get());
+            return Result.result(HttpStatus.OK.value(), "Lấy chi tiết order thành công", orderDTO);
+        } else {
+            throw new EntityIsEmptyException("Không có id!");
         }
-        OrderDTO orderDTO = this.orderService.fillById(id.get());
-        return ResponseEntity.ok().body(orderDTO);
     }
 
     @PostMapping("/create-order")
-    public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO){
+    public Result<?> createOrder(@RequestBody OrderDTO orderDTO){
         OrderDTO result = this.orderService.create(orderDTO);
-        return ResponseEntity.ok().body(result);
+        return Result.result(HttpStatus.OK.value(), "Tạo order thành công", result);
     }
 }
