@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import UserLayout from '@/UserLayout/index.vue'
 
 /* Router Modules */
 import componentsRouter from './modules/components'
@@ -80,6 +81,17 @@ export const constantRoutes = [
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: UserLayout,
+    redirect: '/user/home',
+    children: [
+      {
+        path: '/user/home',
+        component: () => import('@/views/UserPages/Home.vue')
       }
     ]
   },
