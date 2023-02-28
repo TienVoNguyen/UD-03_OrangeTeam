@@ -72,6 +72,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/testhtml',
+    component: () => import('@/views/TestHtml.vue'),
+    hidden: true
+  },
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
