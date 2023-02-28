@@ -76,6 +76,7 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import SocialSign from './components/SocialSignin'
+import store from '@/store'
 
 export default {
   name: 'Login',
@@ -157,7 +158,9 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
+            .then(async() => {
+              const { roles } = await store.dispatch('user/getInfo')
+              console.log(roles)
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
