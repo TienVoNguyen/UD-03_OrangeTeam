@@ -1,5 +1,6 @@
 package com.orange.services.impl;
 
+import com.orange.common.payload.Page;
 import com.orange.domain.dto.OrderViewDTO;
 import com.orange.domain.mapper.IOrderViewMapper;
 import com.orange.domain.model.Order;
@@ -11,8 +12,6 @@ import com.orange.repositories.IOrderDetailRepository;
 import com.orange.repositories.IOrderRepository;
 import com.orange.services.IOrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -52,14 +51,21 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public Page<?> fillAll(Pageable pageable){
-        Page<Order> result = this.orderRepository.findAll(pageable);
+        org.springframework.data.domain.Page<Order> result = this.orderRepository.findAll(pageable);
         int totalPages = result.getTotalPages();
         List<Order> orderList = result.toList();
 //        List<OrderDTO> orderDTOList = orderMapper.toDtoList(orderList);
 //        Page<OrderDTO> orderDTOPage = new PageImpl<>(orderDTOList, pageable, totalPages);
         List<OrderViewDTO> viewDTOList = orderViewMapper.toDtoList(orderList);
-        Page<OrderViewDTO> viewDTOPage = new PageImpl<>(viewDTOList, pageable, totalPages);
-        return viewDTOPage;
+        Page<OrderViewDTO> pageViewDTO = new Page<>();
+        pageViewDTO.setTotalPages(totalPages);
+        pageViewDTO.setPageNumber(result.getNumber());
+        pageViewDTO.setResult(viewDTOList);
+        pageViewDTO.setPageSize(result.getSize());
+        pageViewDTO.setTotalItems((int) result.getTotalElements());
+
+
+        return pageViewDTO;
     }
 
     @Override
