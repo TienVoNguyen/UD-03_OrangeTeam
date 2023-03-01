@@ -72,31 +72,13 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/testhtml',
-    component: () => import('@/views/TestHtml.vue'),
-    hidden: true
-  },
-  {
     path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/user',
     component: UserLayout,
-    redirect: '/user/home',
+    redirect: '/home',
     children: [
       {
-        path: '/user/home',
-        component: () => import('@/views/UserPages/Home.vue')
+        path: '/home',
+        component: () => import('@/views/user/Home.vue')
       }
     ]
   },
@@ -146,6 +128,34 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+  {
+    path: '/admin',
+    component: Layout,
+    redirect: '/dashboard',
+    meta: { roles: ['admin', 'editor'] },
+    children: [
+      {
+        path: '/dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: UserLayout,
+    redirect: 'profile',
+    hidden: true,
+    children: [
+      {
+        path: 'profile',
+        component: () => import('@/views/profile/index'),
+        name: 'Profile',
+        meta: { title: 'Profile', icon: 'user', noCache: true }
+      }
+    ]
+  },
   {
     path: '/permission',
     component: Layout,
