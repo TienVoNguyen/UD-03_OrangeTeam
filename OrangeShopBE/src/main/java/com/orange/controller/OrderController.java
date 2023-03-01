@@ -1,10 +1,12 @@
 package com.orange.controller;
 
+import com.orange.common.payload.Page;
+import com.orange.common.payload.Result;
 import com.orange.exception.EntityIsEmptyException;
 import com.orange.domain.dto.OrderDTO;
 import com.orange.services.IOrderService;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,24 +24,24 @@ public class OrderController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllOrders(@RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "20") int size){
+    public Result<?> getAllOrders(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "20") int size){
         Page<?> pages = this.orderService.fillAll(PageRequest.of(page, size));
-        return ResponseEntity.ok().body(pages);
+        return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu order thành công!", pages);
     }
 
     @GetMapping("/order-detail")
-    public ResponseEntity<?> getOrderById(@RequestParam(value = "id", defaultValue = "0") Optional<Long> id){
+    public Result<?> getOrderById(@RequestParam(value = "id", defaultValue = "0") Optional<Long> id){
         if (!id.isPresent()){
             throw new EntityIsEmptyException("Id is empty!");
         }
         OrderDTO orderDTO = this.orderService.findById(id.get());
-        return ResponseEntity.ok().body(orderDTO);
+        return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu order thành công!", orderDTO);
     }
 
     @PostMapping("/create-order")
-    public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO){
+    public Result<?> createOrder(@RequestBody OrderDTO orderDTO){
         OrderDTO result = this.orderService.create(orderDTO);
-        return ResponseEntity.ok().body(result);
+        return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu order thành công!", result);
     }
 }
