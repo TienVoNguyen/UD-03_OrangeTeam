@@ -66,7 +66,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public OrderDTO fillById(Long id) {
+    public OrderDTO findById(Long id) {
         Order order = getOrderById(id);
         return orderMapper.toDto(order);
     }

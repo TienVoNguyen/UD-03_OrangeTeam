@@ -30,7 +30,7 @@ public class OrderController {
     @GetMapping("/order-detail")
     public Result<?> getOrderById(@RequestParam(value = "id", defaultValue = "0") Optional<Long> id){
         if (id.isPresent()) {
-            OrderDTO orderDTO = this.orderService.fillById(id.get());
+            OrderDTO orderDTO = this.orderService.findById(id.get());
             return Result.result(HttpStatus.OK.value(), "Lấy chi tiết order thành công", orderDTO);
         } else {
             throw new EntityIsEmptyException("Không có id!");

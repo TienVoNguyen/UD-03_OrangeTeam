@@ -26,5 +26,5 @@ public interface BaseService<T, ID>{
      */
     Page<?> fillAll(Pageable pageable);
 
-    T fillById(ID id);
+    T findById(ID id);
 }
