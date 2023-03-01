@@ -33,7 +33,7 @@ public class OrderController {
         if (!id.isPresent()){
             throw new EntityIsEmptyException("Id is empty!");
         }
-        OrderDTO orderDTO = this.orderService.fillById(id.get());
+        OrderDTO orderDTO = this.orderService.findById(id.get());
         return ResponseEntity.ok().body(orderDTO);
     }
 

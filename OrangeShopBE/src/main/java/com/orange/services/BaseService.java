@@ -10,5 +10,5 @@ public interface BaseService<T, ID>{
     T delete(T dto);
     Page<?> fillAll(Pageable pageable);
 
-    T fillById(ID id);
+    T findById(ID id);
 }
