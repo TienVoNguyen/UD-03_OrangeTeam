@@ -48,13 +48,18 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Page<?> fillAll(Pageable pageable) {
+    public com.orange.common.payload.Page<?> fillAll(Pageable pageable) {
         Page<Product> result = this.productRepository.findAll(pageable);
         int totalPages = result.getTotalPages();
         List<Product> productList = result.toList();
         List<ProductDTO> DTOList = productMapper.toDtoList(productList);
-        Page<ProductDTO> DTOPage = new PageImpl<>(DTOList, pageable, totalPages);
-        return DTOPage;
+        com.orange.common.payload.Page pageProduct = new com.orange.common.payload.Page();
+        pageProduct.setResult(DTOList);
+        pageProduct.setTotalPages(totalPages);
+        pageProduct.setTotalItems((int) result.getTotalElements());
+        pageProduct.setPageSize(result.getSize());
+        pageProduct.setPageNumber(result.getNumber());
+        return pageProduct;
     }
 
     @Override
