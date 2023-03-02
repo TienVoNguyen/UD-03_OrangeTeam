@@ -98,12 +98,12 @@
             <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a>
           </div>
           <div class="tab-content">
-            <div class="tab-pane fade show active" id="tab-pane-1">
+            <div id="tab-pane-1" class="tab-pane fade show active">
               <h4 class="mb-3">Product Description</h4>
               <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut diam consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea invidunt.</p>
               <p>Dolore magna est eirmod sanctus dolor, amet diam et eirmod et ipsum. Amet dolore tempor consetetur sed lorem dolor sit lorem tempor. Gubergren amet amet labore sadipscing clita clita diam clita. Sea amet et sed ipsum lorem elitr et, amet et labore voluptua sit rebum. Ea erat sed et diam takimata sed justo. Magna takimata justo et amet magna et.</p>
             </div>
-            <div class="tab-pane fade" id="tab-pane-2">
+            <div id="tab-pane-2" class="tab-pane fade">
               <h4 class="mb-3">Additional Information</h4>
               <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut diam consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea invidunt.</p>
               <div class="row">
@@ -176,15 +176,15 @@
                   <form>
                     <div class="form-group">
                       <label for="message">Your Review *</label>
-                      <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
+                      <textarea id="message" cols="30" rows="5" class="form-control" />
                     </div>
                     <div class="form-group">
                       <label for="name">Your Name *</label>
-                      <input type="text" class="form-control" id="name">
+                      <input id="name" type="text" class="form-control">
                     </div>
                     <div class="form-group">
                       <label for="email">Your Email *</label>
-                      <input type="email" class="form-control" id="email">
+                      <input id="email" type="email" class="form-control">
                     </div>
                     <div class="form-group mb-0">
                       <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
