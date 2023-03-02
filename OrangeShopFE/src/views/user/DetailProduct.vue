@@ -45,64 +45,26 @@
             Accus labore stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum diam et rebum kasd rebum.</p>
           <div class="d-flex mb-3">
             <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
-            <form>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="size-1" name="size">
-                <label class="custom-control-label" for="size-1">XS</label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="size-2" name="size">
-                <label class="custom-control-label" for="size-2">S</label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="size-3" name="size">
-                <label class="custom-control-label" for="size-3">M</label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="size-4" name="size">
-                <label class="custom-control-label" for="size-4">L</label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="size-5" name="size">
-                <label class="custom-control-label" for="size-5">XL</label>
-              </div>
-            </form>
+            <el-radio-group v-model="size" style="padding-top: .4rem">
+              <el-radio v-for="(s, index) in product.sizes" :key="index" :label="s.id" class="mb-0 font-weight-bold">{{ s.name }}</el-radio>
+            </el-radio-group>
           </div>
           <div class="d-flex mb-4">
             <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
-            <form>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="color-1" name="color">
-                <label class="custom-control-label" for="color-1">Black</label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="color-2" name="color">
-                <label class="custom-control-label" for="color-2">White</label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="color-3" name="color">
-                <label class="custom-control-label" for="color-3">Red</label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="color-4" name="color">
-                <label class="custom-control-label" for="color-4">Blue</label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="color-5" name="color">
-                <label class="custom-control-label" for="color-5">Green</label>
-              </div>
-            </form>
+            <el-radio-group v-model="color" style="padding-top: .4rem">
+              <el-radio v-for="(c, index) in product.colors" :key="index" :label="c.id" class="mb-0 font-weight-bold">{{ c.name }}</el-radio>
+            </el-radio-group>
           </div>
           <div class="d-flex align-items-center mb-4 pt-2">
             <div class="input-group quantity mr-3" style="width: 130px;">
               <div class="input-group-btn">
-                <button class="btn btn-primary btn-minus" >
+                <button class="btn btn-primary btn-minus h-100">
                   <i class="fa fa-minus" />
                 </button>
               </div>
               <input type="text" class="form-control bg-secondary text-center" value="1">
               <div class="input-group-btn">
-                <button class="btn btn-primary btn-plus">
+                <button class="btn btn-primary btn-plus h-100">
                   <i class="fa fa-plus" />
                 </button>
               </div>
@@ -179,7 +141,7 @@
                 </div>
               </div>
             </div>
-            <div class="tab-pane fade" id="tab-pane-3">
+            <div id="tab-pane-3" class="tab-pane fade">
               <div class="row">
                 <div class="col-md-6">
                   <h4 class="mb-4">1 review for "Colorful Stylish Shirt"</h4>
@@ -255,6 +217,8 @@ export default {
   mixins: [baseCommon, userCommon, BaseValidate],
   data() {
     return {
+      size: '',
+      color: ''
     }
   },
   methods: {
@@ -285,4 +249,91 @@ export default {
 .text-primary {
   color: #D19C97 !important;
 }
+.btn-primary {
+  color: #212529;
+  background-color: #D19C97;
+  border-color: #D19C97;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #c5837c;
+  border-color: #c17a74;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  color: #fff;
+  background-color: #c5837c;
+  border-color: #c17a74;
+  box-shadow: 0 0 0 0.2rem rgba(183, 138, 135, 0.5);
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+  color: #212529;
+  background-color: #D19C97;
+  border-color: #D19C97;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #c17a74;
+  border-color: #bd726b;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(183, 138, 135, 0.5);
+}
+.bg-secondary {
+  background-color: #EDF1FF !important;
+}
+
+a.bg-secondary:hover, a.bg-secondary:focus,
+button.bg-secondary:hover,
+button.bg-secondary:focus {
+  background-color: #bac9ff !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-control {
+    transition: none;
+  }
+}
+
+.form-control::-ms-expand {
+  background-color: transparent;
+  border: 0;
+}
+
+.form-control:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #495057;
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #f8f0ef;
+  outline: 0;
+  box-shadow: none;
+}
+
+.form-control::placeholder {
+  color: #999999;
+  opacity: 1;
+}
+
+.form-control:disabled, .form-control[readonly] {
+  background-color: #e9ecef;
+  opacity: 1;
+}
+
+input[type="date"].form-control,
+input[type="time"].form-control,
+input[type="datetime-local"].form-control,
+input[type="month"].form-control {
+  appearance: none;
+}
+
 </style>

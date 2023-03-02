@@ -14,7 +14,7 @@
             <el-radio-button v-for="(s) in product.sizes" :key="s.id" :label="s.id">{{ s.name }}</el-radio-button>
           </el-radio-group>
         </div>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center w-100">
           <el-radio-group v-model="selectedColor" size="mini" fill="#D19C97" @change="chooseColor">
             <el-radio-button v-for="(c) in product.colors" :key="c.id" :label="c.id">{{ c.name }}</el-radio-button>
           </el-radio-group>
@@ -34,8 +34,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
+import baseCommon from '@/utils/base-common'
 export default {
+  mixins: [baseCommon],
   props: {
     // eslint-disable-next-line vue/require-default-prop
     product: {
@@ -51,10 +52,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'sidebar',
       'avatar',
-      'device',
-      'roles',
       'token'
     ])
   },
@@ -69,7 +67,11 @@ export default {
       if (!this.token) {
         this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       } else {
-        console.log(product, size, color)
+        if (size && color) {
+          console.log(product, size, color)
+        } else {
+          this.notifyWarning('Cảnh báo', 'Hãy chọn Size và Color trước khi thêm vào giỏ hàng!')
+        }
       }
     },
     viewDetail(data) {
@@ -79,6 +81,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.el-radio-button--mini .el-radio-button__inner {
+  padding: 5px 12px;
+}
 </style>
