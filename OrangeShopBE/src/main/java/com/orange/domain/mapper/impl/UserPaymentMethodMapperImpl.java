@@ -4,15 +4,16 @@ import com.orange.domain.dto.UserPaymentMethodDTO;
 import com.orange.domain.mapper.IUserPaymentMethodMapper;
 import com.orange.domain.model.User;
 import com.orange.domain.model.UserPaymentMethod;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class UserPaymentMethodMapperImpl implements IUserPaymentMethodMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
 
     @Override

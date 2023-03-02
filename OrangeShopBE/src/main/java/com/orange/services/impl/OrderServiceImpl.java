@@ -5,18 +5,24 @@ import com.orange.domain.dto.OrderViewDTO;
 import com.orange.domain.mapper.IOrderViewMapper;
 import com.orange.domain.model.Order;
 import com.orange.domain.model.OrderDetail;
+import com.orange.domain.model.ProductDetail;
 import com.orange.exception.EntityNotFoundException;
 import com.orange.domain.mapper.IOrderMapper;
 import com.orange.domain.dto.OrderDTO;
+import com.orange.exception.NotEnoughStockException;
 import com.orange.repositories.IOrderDetailRepository;
 import com.orange.repositories.IOrderRepository;
+import com.orange.repositories.IProductDetailRepository;
+import com.orange.repositories.IProductRepository;
 import com.orange.services.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,17 +32,50 @@ public class OrderServiceImpl implements IOrderService {
     private final IOrderDetailRepository orderDetailRepository;
     private final IOrderMapper  orderMapper;
     private final IOrderViewMapper orderViewMapper;
+    private final IProductRepository productRepository;
+    private final IProductDetailRepository productDetailRepository;
 
 
     @Override
     public OrderDTO create(OrderDTO dto) {
-        Order result = this.orderRepository.save(orderMapper.toEntity(dto));
+
+        Order result = orderRepository.save(orderMapper.toEntity(dto));
         Set<OrderDetail> orderDetails = result.getOrderDetails();
-        orderDetails.forEach(o -> o.setOrder(result));
-        orderDetailRepository.saveAll(orderDetails);
-        result.setOrderDetails(orderDetails);
+
+        List<Long> productIds = orderDetails.stream().map(OrderDetail::getProductDetail).map(ProductDetail::getId).collect(Collectors.toList());
+
+        Map<Long, ProductDetail> productDetailMap = productDetailRepository.findAllById(productIds)
+                .stream()
+                .collect(Collectors.toMap(ProductDetail::getId, Function.identity()));
+
+        List<OrderDetail> updatedOrderDetails = orderDetails.stream().map(orderDetail -> {
+            Long productId = orderDetail.getProductDetail().getId();
+            Integer quantity = orderDetail.getQuantity();
+
+            ProductDetail productDetail = productDetailMap.get(productId);
+
+            if (productDetail == null) {
+                throw new EntityNotFoundException("Không tìm thấy sản phẩm có ID: " + productId);
+            }
+
+            if (productDetail.getQuantity() < quantity) {
+                throw new NotEnoughStockException("Số lượng trong kho không đủ");
+            }
+
+            productDetail.setQuantity(productDetail.getQuantity() - quantity);
+            orderDetail.setProductDetail(productDetail);
+            orderDetail.setOrder(result);
+
+            return orderDetail;
+        }).collect(Collectors.toList());
+
+        orderDetailRepository.saveAll(updatedOrderDetails);
+        productDetailRepository.saveAll(productDetailMap.values());
+        result.setOrderDetails(new HashSet<>(updatedOrderDetails));
+
         return orderMapper.toDto(result);
     }
+
 
     @Override
     public OrderDTO update(OrderDTO dto) {
@@ -52,20 +91,12 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public Page<?> fillAll(Pageable pageable){
         org.springframework.data.domain.Page<Order> result = this.orderRepository.findAll(pageable);
+        List<OrderViewDTO> viewDTOList = result.getContent()
+                .stream()
+                .map(orderViewMapper::toDto)
+                .collect(Collectors.toList());
         int totalPages = result.getTotalPages();
-        List<Order> orderList = result.toList();
-//        List<OrderDTO> orderDTOList = orderMapper.toDtoList(orderList);
-//        Page<OrderDTO> orderDTOPage = new PageImpl<>(orderDTOList, pageable, totalPages);
-        List<OrderViewDTO> viewDTOList = orderViewMapper.toDtoList(orderList);
-        Page<OrderViewDTO> pageViewDTO = new Page<>();
-        pageViewDTO.setTotalPages(totalPages);
-        pageViewDTO.setPageNumber(result.getNumber());
-        pageViewDTO.setResult(viewDTOList);
-        pageViewDTO.setPageSize(result.getSize());
-        pageViewDTO.setTotalItems((int) result.getTotalElements());
-
-
-        return pageViewDTO;
+        return Page.of(totalPages, result.getNumber(),totalPages, Math.toIntExact(result.getTotalElements()), viewDTOList);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.orange.common.payload.Result;
 import com.orange.exception.EntityIsEmptyException;
 import com.orange.domain.dto.OrderDTO;
 import com.orange.services.IOrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,10 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @RequestMapping("/test/order")
+@RequiredArgsConstructor
 public class OrderController {
 
     private final IOrderService orderService;
-
-    public OrderController(IOrderService orderService) {
-        this.orderService = orderService;
-    }
 
     @GetMapping("")
     public Result<?> getAllOrders(@RequestParam(defaultValue = "0") int page,

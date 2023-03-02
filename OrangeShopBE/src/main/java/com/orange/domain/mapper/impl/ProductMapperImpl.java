@@ -5,17 +5,17 @@ import com.orange.domain.mapper.IProductDetailMapper;
 import com.orange.domain.mapper.IProductMapper;
 import com.orange.domain.model.Category;
 import com.orange.domain.model.Product;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ProductMapperImpl implements IProductMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private IProductDetailMapper productDetailMapper;
+    private final ModelMapper modelMapper;
+    private final IProductDetailMapper productDetailMapper;
     @Override
     public Product toEntity(ProductDTO dto) {
         Product entity = modelMapper.map(dto, Product.class);
