@@ -72,17 +72,6 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/',
-    component: UserLayout,
-    redirect: '/home',
-    children: [
-      {
-        path: '/home',
-        component: () => import('@/views/user/component/Home.vue')
-      }
-    ]
-  },
-  {
     path: '/documentation',
     component: Layout,
     children: [
@@ -120,6 +109,48 @@ export const constantRoutes = [
         meta: { title: 'Profile', icon: 'user', noCache: true }
       }
     ]
+  },
+  {
+    path: '/',
+    component: UserLayout,
+    redirect: '/home',
+    children: [
+      {
+        path: '/home',
+        component: () => import('@/views/user/Home.vue'),
+        name: 'Home',
+        meta: { title: 'Home', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/product',
+    component: UserLayout,
+    redirect: '/product/view-detail',
+    name: 'Product',
+    meta: { title: 'Product', noCache: true },
+    children: [
+      {
+        path: 'view-detail',
+        component: () => import('@/views/user/DetailProduct.vue'),
+        name: 'Detail',
+        meta: { title: 'Detail', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: UserLayout,
+    redirect: 'profile',
+    hidden: true,
+    children: [
+      {
+        path: 'profile',
+        component: () => import('@/views/profile/index'),
+        name: 'Profile',
+        meta: { title: 'Profile', icon: 'user', noCache: true }
+      }
+    ]
   }
 ]
 
@@ -139,20 +170,6 @@ export const asyncRoutes = [
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/user',
-    component: UserLayout,
-    redirect: 'profile',
-    hidden: true,
-    children: [
-      {
-        path: 'profile',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
       }
     ]
   },

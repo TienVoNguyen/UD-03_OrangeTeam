@@ -29,7 +29,7 @@
         </router-link>
         <!-- Left links -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <router-link class="nav-item" to="/user/home">
+          <router-link class="nav-item" to="/home">
             <span class="nav-link">Trang chủ</span>
           </router-link>
           <li class="nav-item">
