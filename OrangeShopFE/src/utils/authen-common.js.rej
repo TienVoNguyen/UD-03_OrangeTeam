@@ -1,4 +1,0 @@
-diff a/src/utils/authen-common.js b/src/utils/authen-common.js	(rejected hunks)
-@@ -4 +4 @@ export default {
--      //debugger
-+      // debugger
