@@ -35,13 +35,17 @@
 <script>
 import { mapGetters } from 'vuex'
 import baseCommon from '@/utils/base-common'
+import userCommon from '@/views/user/Mixin/user-mixin'
+
 export default {
-  mixins: [baseCommon],
+  mixins: [baseCommon, userCommon],
   props: {
-    // eslint-disable-next-line vue/require-default-prop
     product: {
       type: Object,
-      require: true
+      require: true,
+      default(rawProps) {
+        return { message: 'Truyền vào product' }
+      }
     }
   },
   data() {
@@ -62,17 +66,6 @@ export default {
     },
     chooseColor() {
       console.log(this.selectedColor)
-    },
-    addToCart(product, size, color) {
-      if (!this.token) {
-        this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-      } else {
-        if (size && color) {
-          console.log(product, size, color)
-        } else {
-          this.notifyWarning('Cảnh báo', 'Hãy chọn Size và Color trước khi thêm vào giỏ hàng!')
-        }
-      }
     },
     viewDetail(data) {
       this.$router.push(`/product`)

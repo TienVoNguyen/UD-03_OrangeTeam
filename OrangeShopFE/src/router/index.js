@@ -147,8 +147,8 @@ export const constantRoutes = [
       {
         path: 'profile',
         component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        name: 'User Profile',
+        meta: { title: 'User Profile', icon: 'user', noCache: true }
       }
     ]
   }

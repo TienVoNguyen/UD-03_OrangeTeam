@@ -20,7 +20,8 @@ export default {
           { id: 5, name: 'Green' }
         ],
         price1: '232312',
-        price2: '203233'
+        price2: '203233',
+        quantity: 30
       },
       productDetail: [
         {
@@ -188,11 +189,18 @@ export default {
   created() {
   },
   methods: {
-    addToCart(data) {
+    addToCart(product, size, color, quantity) {
       if (!this.token) {
         this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       } else {
-        console.log(data)
+        if (size && color) {
+          if (!quantity) {
+            quantity = 1
+          }
+          console.log(product, size, color, quantity)
+        } else {
+          this.notifyWarning('Cảnh báo', 'Hãy chọn Size và Color trước khi thêm vào giỏ hàng!')
+        }
       }
     },
     registerUpdate() {
