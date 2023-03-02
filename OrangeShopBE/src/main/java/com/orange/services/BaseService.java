@@ -1,6 +1,6 @@
 package com.orange.services;
 
-import org.springframework.data.domain.Page;
+import com.orange.common.payload.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;

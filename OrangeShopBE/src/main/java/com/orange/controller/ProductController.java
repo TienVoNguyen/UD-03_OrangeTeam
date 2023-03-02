@@ -1,20 +1,19 @@
 package com.orange.controller;
 
+import com.orange.common.payload.Page;
 import com.orange.common.payload.Result;
 import com.orange.domain.dto.ProductDTO;
 import com.orange.exception.EntityIsEmptyException;
 import com.orange.services.IProductService;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/product")
+@RequestMapping("test/product")
 public class ProductController {
     private final IProductService productService;
     public ProductController(IProductService productService) {
@@ -26,7 +25,7 @@ public class ProductController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size)
     {
-        Page<?> pages = this.productService.fillAll(PageRequest.of(page, size));
+        Page<?> pages = (Page<?>) this.productService.fillAll(PageRequest.of(page, size));
         return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu thành công!", pages);
     }
 

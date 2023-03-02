@@ -1,27 +1,27 @@
 package com.orange.services.impl;
 
+import com.orange.common.payload.Page;
 import com.orange.domain.dto.OrderViewDTO;
 import com.orange.domain.mapper.IOrderViewMapper;
 import com.orange.domain.model.Order;
 import com.orange.domain.model.OrderDetail;
-import com.orange.exception.EntityAlreadyExist;
+import com.orange.domain.model.ProductDetail;
 import com.orange.exception.EntityNotFoundException;
 import com.orange.domain.mapper.IOrderMapper;
 import com.orange.domain.dto.OrderDTO;
-import com.orange.exception.OrderUpdateException;
+import com.orange.exception.NotEnoughStockException;
 import com.orange.repositories.IOrderDetailRepository;
 import com.orange.repositories.IOrderRepository;
+import com.orange.repositories.IProductDetailRepository;
+import com.orange.repositories.IProductRepository;
 import com.orange.services.IOrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,9 +32,54 @@ public class OrderServiceImpl implements IOrderService {
     private final IOrderDetailRepository orderDetailRepository;
     private final IOrderMapper  orderMapper;
     private final IOrderViewMapper orderViewMapper;
+    private final IProductRepository productRepository;
+    private final IProductDetailRepository productDetailRepository;
+
+
+    @Override
+    public OrderDTO create(OrderDTO dto) {
+
+        Order result = orderRepository.save(orderMapper.toEntity(dto));
+        Set<OrderDetail> orderDetails = result.getOrderDetails();
+
+        List<Long> productIds = orderDetails.stream().map(OrderDetail::getProductDetail).map(ProductDetail::getId).collect(Collectors.toList());
+
+        Map<Long, ProductDetail> productDetailMap = productDetailRepository.findAllById(productIds)
+                .stream()
+                .collect(Collectors.toMap(ProductDetail::getId, Function.identity()));
+
+        List<OrderDetail> updatedOrderDetails = orderDetails.stream().map(orderDetail -> {
+            Long productId = orderDetail.getProductDetail().getId();
+            Integer quantity = orderDetail.getQuantity();
+
+            ProductDetail productDetail = productDetailMap.get(productId);
+
+            if (productDetail == null) {
+                throw new EntityNotFoundException("Không tìm thấy sản phẩm có ID: " + productId);
+            }
+
+            if (productDetail.getQuantity() < quantity) {
+                throw new NotEnoughStockException("Số lượng trong kho không đủ");
+            }
+
+            productDetail.setQuantity(productDetail.getQuantity() - quantity);
+            orderDetail.setProductDetail(productDetail);
+            orderDetail.setOrder(result);
+
+            return orderDetail;
+        }).collect(Collectors.toList());
+
+        orderDetailRepository.saveAll(updatedOrderDetails);
+        productDetailRepository.saveAll(productDetailMap.values());
+        result.setOrderDetails(new HashSet<>(updatedOrderDetails));
+
+        return orderMapper.toDto(result);
+    }
+
 
     @Override
     public OrderDTO update(OrderDTO dto) {
+
         return null;
     }
 
@@ -44,53 +89,22 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public OrderDTO create(OrderDTO dto) {
-        if (dto.getId() == 0 || dto.getId() == null) {
-            throw new EntityAlreadyExist("Order id must be null!");
-        }
-        Order result = this.orderRepository.save(orderMapper.toEntity(dto));
-        Set<OrderDetail> orderDetails = result.getOrderDetails();
-        orderDetails.forEach(o -> o.setOrder(result));
-        orderDetailRepository.saveAll(orderDetails);
-        result.setOrderDetails(orderDetails);
-        return orderMapper.toDto(result);
-    }
-
-    @Override
     public Page<?> fillAll(Pageable pageable){
-        Page<Order> result = this.orderRepository.findAll(pageable);
-        List<OrderViewDTO> viewDTOList = result.getContent().stream()
-                                                .map(orderViewMapper::toDto)
-                                                .collect(Collectors.toList());
-        return new PageImpl<>(viewDTOList, pageable, result.getTotalPages());
+        org.springframework.data.domain.Page<Order> result = this.orderRepository.findAll(pageable);
+        List<OrderViewDTO> viewDTOList = result.getContent()
+                .stream()
+                .map(orderViewMapper::toDto)
+                .collect(Collectors.toList());
+        int totalPages = result.getTotalPages();
+        return Page.of(totalPages, result.getNumber(),totalPages, Math.toIntExact(result.getTotalElements()), viewDTOList);
     }
 
     @Override
     public OrderDTO findById(Long id) {
-        Order order = getOrderById(id);
+        Order order = this.orderRepository.findById(id).orElse(null);
+        if (order == null) {
+            throw new EntityNotFoundException("Order not found!");
+        }
         return orderMapper.toDto(order);
-    }
-
-    private Order getOrderById(Long id) {
-        return this.orderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found!"));
-    }
-
-    @Transactional
-    public OrderDTO updateOrderStatus(OrderDTO orderDTO) {
-        if (orderDTO.getId() == null) {
-            throw new IllegalArgumentException("Order id must not be null");
-        }
-        if (orderDTO.getOrderStatus() == null) {
-            throw new IllegalArgumentException("Order status must not be null");
-        }
-
-        try {
-            Order order = this.getOrderById(orderDTO.getId());
-            order.setOrderStatus(orderDTO.getOrderStatus());
-            return orderMapper.toDto(this.orderRepository.save(order));
-        } catch (DataAccessException e) {
-            throw new OrderUpdateException("Error updating order status");
-        }
     }
 }
