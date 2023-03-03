@@ -3,23 +3,24 @@ package com.orange.services.impl;
 import com.orange.common.payload.Page;
 import com.orange.domain.dto.OrderViewDTO;
 import com.orange.domain.mapper.IOrderViewMapper;
-import com.orange.domain.model.Order;
-import com.orange.domain.model.OrderDetail;
-import com.orange.domain.model.ProductDetail;
+import com.orange.domain.model.*;
 import com.orange.exception.EntityNotFoundException;
 import com.orange.domain.mapper.IOrderMapper;
 import com.orange.domain.dto.OrderDTO;
 import com.orange.exception.NotEnoughStockException;
+import com.orange.exception.OrderUpdateException;
+import com.orange.payload.request.UpdateOrderStatus;
 import com.orange.repositories.IOrderDetailRepository;
 import com.orange.repositories.IOrderRepository;
 import com.orange.repositories.IProductDetailRepository;
 import com.orange.repositories.IProductRepository;
 import com.orange.services.IOrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -38,6 +39,8 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public OrderDTO create(OrderDTO dto) {
+
+        dto.setOrderStatus(new OrderStatus(Long.valueOf(EOrderStatus.WAIT_FOR_CONFIRMATION.getId())));
 
         Order result = orderRepository.save(orderMapper.toEntity(dto));
         Set<OrderDetail> orderDetails = result.getOrderDetails();
@@ -101,10 +104,31 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public OrderDTO findById(Long id) {
-        Order order = this.orderRepository.findById(id).orElse(null);
-        if (order == null) {
-            throw new EntityNotFoundException("Order not found!");
-        }
+        Order order = getOrderById(id);
         return orderMapper.toDto(order);
+    }
+
+    private Order getOrderById(Long id) {
+        return this.orderRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy order!"));
+    }
+
+    @Transactional
+    @Override
+    public OrderDTO updateOrderStatus(UpdateOrderStatus orderStatus) {
+        if (orderStatus.getOrderId() == null) {
+            throw new IllegalArgumentException("Không được để trống id");
+        }
+        if (orderStatus.getOrderStatusId() == null) {
+            throw new IllegalArgumentException("Không được để trống trạng thái");
+        }
+
+        try {
+            Order order = this.getOrderById(orderStatus.getOrderId());
+            order.setOrderStatus(new OrderStatus(orderStatus.getOrderStatusId()));
+            return orderMapper.toDto(this.orderRepository.save(order));
+        } catch (DataAccessException e) {
+            throw new OrderUpdateException("Có lỗi xảy ra trong quá trình cập nhật trạng thái");
+        }
     }
 }
