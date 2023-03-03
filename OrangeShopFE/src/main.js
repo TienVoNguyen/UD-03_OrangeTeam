@@ -56,6 +56,24 @@ Vue.use(Element, {
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
+Vue.filter('currency', function (value, currencyCode = 'USD', decimals = 2, symbol = '$', thousandsSeparator = ',', decimalSeparator = '.') {
+  if (!value) {
+    return `${symbol}0.00`;
+  }
+
+  const amount = parseFloat(value);
+  if (isNaN(amount)) {
+    return '';
+  }
+
+  const formatter = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: currencyCode,
+    minimumFractionDigits: decimals
+  });
+
+  return formatter.format(amount).replace(/[.,]/g, (match) => match === '.' ? decimalSeparator : thousandsSeparator);
+});
 
 Vue.config.productionTip = false
 

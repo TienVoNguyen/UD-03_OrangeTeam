@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 @Transactional
 @Component
 public class Indexer {
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     private static final int THREAD_NUMBER = 4;
 

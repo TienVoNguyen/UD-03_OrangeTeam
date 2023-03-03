@@ -5,16 +5,16 @@ import com.orange.domain.mapper.IProductDetailMapper;
 import com.orange.domain.mapper.IVariationOptionMapper;
 import com.orange.domain.model.Product;
 import com.orange.domain.model.ProductDetail;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ProductDetailMapperImpl implements IProductDetailMapper {
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private IVariationOptionMapper variationOptionMapper;
+    private final ModelMapper modelMapper;
+    private final IVariationOptionMapper variationOptionMapper;
 
     @Override
     public ProductDetail toEntity(ProductDetailDTO dto) {

@@ -1,4 +1,4 @@
-import { ext, regex, required, mimes, image, size } from 'vee-validate/dist/rules'
+import { ext, regex, required, mimes, image, size, email } from 'vee-validate/dist/rules'
 import { extend } from 'vee-validate'
 
 extend('required', {
@@ -32,6 +32,7 @@ extend('size', {
   ...size,
   message: ` phải nhỏ hơn {size}kb`
 })
+
 extend('max', {
   validate(value, args) {
     return value.toString().length <= args.length
@@ -39,6 +40,7 @@ extend('max', {
   params: ['length'],
   message: ` không vượt quá {length} ký tự`
 })
+
 extend('isLower', {
   params: ['target'],
   validate(value, { target }) {
@@ -47,6 +49,10 @@ extend('isLower', {
   message: ' phải nhỏ hơn chặn trên'
 })
 
+extend('email', {
+  ...email,
+  message: ` Email phải đúng định dạng`
+})
 export default {
   data() {
     return {

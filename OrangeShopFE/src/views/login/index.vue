@@ -112,6 +112,11 @@ export default {
       otherQuery: {}
     }
   },
+  computed: {
+    currentUser() {
+      return this.$store.state.user
+    }
+  },
   watch: {
     $route: {
       handler: function(route) {
