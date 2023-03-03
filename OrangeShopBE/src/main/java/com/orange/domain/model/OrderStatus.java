@@ -19,4 +19,8 @@ public class OrderStatus extends BaseEntity{
     @Size(max = 50)
     @Column(name = "status", length = 50)
     private String status;
+
+    public OrderStatus(int id) {
+        this.setId(Long.valueOf(id));
+    }
 }
