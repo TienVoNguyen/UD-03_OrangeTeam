@@ -6,4 +6,3 @@ import authenCommon from './authen-common'
 export default {
   mixins: [paginationCommon, loadingScreenCommon, notificationCommon, dateTimeCommon, authenCommon]
 }
-

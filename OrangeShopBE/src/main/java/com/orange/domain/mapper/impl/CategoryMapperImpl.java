@@ -3,15 +3,16 @@ package com.orange.domain.mapper.impl;
 import com.orange.domain.model.Category;
 import com.orange.domain.mapper.ICategoryMapper;
 import com.orange.domain.dto.CategoryDTO;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class CategoryMapperImpl implements ICategoryMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
     @Override
     public Category toEntity(CategoryDTO dto) {
         Category entity = modelMapper.map(dto, Category.class);
