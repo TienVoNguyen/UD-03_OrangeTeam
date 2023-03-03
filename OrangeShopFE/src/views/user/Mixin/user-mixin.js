@@ -68,7 +68,7 @@ export default {
           name: 'Colorful Stylish Shirt 4',
           sizes: [
             { id: 1, name: 'XS' },
-            { id: 2, name: 'S' },
+            { id: 2, name: 'S' }
           ],
           colors: [
             { id: 1, name: 'Black' },
