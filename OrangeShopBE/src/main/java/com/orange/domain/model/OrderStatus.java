@@ -20,7 +20,7 @@ public class OrderStatus extends BaseEntity{
     @Column(name = "status", length = 50)
     private String status;
 
-    public OrderStatus(int id) {
-        this.setId(Long.valueOf(id));
+    public OrderStatus(Long id) {
+        this.setId(id);
     }
 }

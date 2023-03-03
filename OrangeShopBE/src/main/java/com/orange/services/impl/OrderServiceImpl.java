@@ -40,7 +40,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public OrderDTO create(OrderDTO dto) {
 
-        dto.setOrderStatus(new OrderStatus(EOrderStatus.WAIT_FOR_CONFIRMATION.getId()));
+        dto.setOrderStatus(new OrderStatus(Long.valueOf(EOrderStatus.WAIT_FOR_CONFIRMATION.getId())));
 
         Order result = orderRepository.save(orderMapper.toEntity(dto));
         Set<OrderDetail> orderDetails = result.getOrderDetails();
