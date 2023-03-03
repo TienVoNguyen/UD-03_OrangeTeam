@@ -2,14 +2,27 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      productList: [
-        {
-          id: 1,
-          name: 'Colorful Stylish Shirt',
-          description: 'Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum diam et rebum kasd rebum.',
-          defaultImage: 'default.img'
-        }
-      ],
+      product: {
+        id: 1,
+        name: 'Colorful Stylish Shirt',
+        sizes: [
+          { id: 1, name: 'XS' },
+          { id: 2, name: 'S' },
+          { id: 3, name: 'M' },
+          { id: 4, name: 'L' },
+          { id: 5, name: 'XL' }
+        ],
+        colors: [
+          { id: 1, name: 'Black' },
+          { id: 2, name: 'Blue' },
+          { id: 3, name: 'Yellow' },
+          { id: 4, name: 'Sky' },
+          { id: 5, name: 'Green' }
+        ],
+        price1: '232312',
+        price2: '203233',
+        quantity: 30
+      },
       productDetail: [
         {
           id: 1,
@@ -176,11 +189,18 @@ export default {
   created() {
   },
   methods: {
-    addToCart(data) {
+    addToCart(product, size, color, quantity) {
       if (!this.token) {
         this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       } else {
-        console.log(data)
+        if (size && color) {
+          if (!quantity) {
+            quantity = 1
+          }
+          console.log(product, size, color, quantity)
+        } else {
+          this.notifyWarning('Cảnh báo', 'Hãy chọn Size và Color trước khi thêm vào giỏ hàng!')
+        }
       }
     },
     registerUpdate() {

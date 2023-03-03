@@ -87,27 +87,6 @@ export default {
   background-color: #d3dce6;
 }
 
-.cat-item .cat-img img,
-.product-item .product-img img {
-  transition: .5s;
-}
-
-.cat-item:hover .cat-img img,
-.product-item:hover .product-img img {
-  transform: scale(1.2);
-}
-
-.product-item .linkCard:hover {
-  color: #D19C97 !important;
-  text-decoration: none;
-  background: none !important;
-}
-
-.img-fluid {
-  max-width: 100%;
-  height: auto;
-}
-
 .section-title {
   position: relative;
   display: inline-block;

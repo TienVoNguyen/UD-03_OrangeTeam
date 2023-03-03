@@ -6,21 +6,19 @@ import com.orange.domain.mapper.IAddressMapper;
 import com.orange.domain.mapper.IOrderMapper;
 import com.orange.domain.mapper.IUserPaymentMethodMapper;
 import com.orange.domain.dto.OrderDTO;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class OrderMapperImpl implements IOrderMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private IUserPaymentMethodMapper userPaymentMethodMapper;
-    @Autowired
-    private IAddressMapper addressMapper;
-    @Autowired
-    private IOrderDetailMapper orderDetailMapper;
+    private final ModelMapper modelMapper;
+    private final IUserPaymentMethodMapper userPaymentMethodMapper;
+    private final IAddressMapper addressMapper;
+    private final IOrderDetailMapper orderDetailMapper;
 
     @Override
     public Order toEntity(OrderDTO dto) {

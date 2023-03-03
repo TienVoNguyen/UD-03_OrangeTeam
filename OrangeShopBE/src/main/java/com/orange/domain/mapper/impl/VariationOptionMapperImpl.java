@@ -4,16 +4,16 @@ import com.orange.domain.model.VariationOption;
 import com.orange.domain.mapper.IVariationMapper;
 import com.orange.domain.mapper.IVariationOptionMapper;
 import com.orange.domain.dto.VariationOptionDTO;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class VariationOptionMapperImpl  implements IVariationOptionMapper {
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private IVariationMapper variationMapper;
+    private final ModelMapper modelMapper;
+    private final IVariationMapper variationMapper;
 
     @Override
     public VariationOption toEntity(VariationOptionDTO dto) {

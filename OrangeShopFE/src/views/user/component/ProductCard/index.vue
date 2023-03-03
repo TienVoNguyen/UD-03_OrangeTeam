@@ -5,7 +5,8 @@
         <img class="img-fluid w-100" src="@/assets/img/product-6.jpg" alt="">
         <h6 class="text-truncate mb-3 d-flex justify-content-center">{{ product.name }}</h6>
         <div class="d-flex justify-content-center">
-          <h6>{{ product.price2 | currency('VND', 0, 'đ', '.', ',') }}</h6><h6 class="text-muted ml-2"><del>{{ product.price1 | currency('VND', 0, 'đ', '.', ',') }}</del></h6>
+          <h6>{{ product.price2 | currency('VND', 0, 'đ', '.', ',') }}</h6>
+          <h6 class="text-muted ml-2"><del>{{ product.price1 | currency('VND', 0, 'đ', '.', ',') }}</del></h6>
         </div>
       </div>
       <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
@@ -14,7 +15,7 @@
             <el-radio-button v-for="(s) in product.sizes" :key="s.id" :label="s.id">{{ s.name }}</el-radio-button>
           </el-radio-group>
         </div>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center w-100">
           <el-radio-group v-model="selectedColor" size="mini" fill="#D19C97" @change="chooseColor">
             <el-radio-button v-for="(c) in product.colors" :key="c.id" :label="c.id">{{ c.name }}</el-radio-button>
           </el-radio-group>
@@ -34,13 +35,18 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import baseCommon from '@/utils/base-common'
+import userCommon from '@/views/user/Mixin/user-mixin'
 
 export default {
+  mixins: [baseCommon, userCommon],
   props: {
-    // eslint-disable-next-line vue/require-default-prop
     product: {
       type: Object,
-      require: true
+      require: true,
+      default(rawProps) {
+        return { message: 'Truyền vào product' }
+      }
     }
   },
   data() {
@@ -51,10 +57,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'sidebar',
       'avatar',
-      'device',
-      'roles',
       'token'
     ])
   },
@@ -65,13 +68,6 @@ export default {
     chooseColor() {
       console.log(this.selectedColor)
     },
-    addToCart(product, size, color) {
-      if (!this.token) {
-        this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-      } else {
-        console.log(product, size, color)
-      }
-    },
     viewDetail(data) {
       this.$router.push(`/product`)
     }
@@ -79,6 +75,22 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.el-radio-button--mini .el-radio-button__inner {
+  padding: 5px 12px;
+}
+.product-img img {
+  transition: .5s;
+}
+
+.product-img img:hover {
+  transform: scale(1.2);
+}
+
+.product-item .linkCard:hover {
+  color: #D19C97 !important;
+  text-decoration: none;
+  background: none !important;
+}
 
 </style>
