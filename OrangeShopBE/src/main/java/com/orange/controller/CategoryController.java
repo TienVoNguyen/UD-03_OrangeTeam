@@ -21,6 +21,6 @@ public class CategoryController {
     public Result<?> getAll(@RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "20") int size){
         Page<?> pages = this.categoryService.fillAll(PageRequest.of(page, size));
-        return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu order thành công!", pages);
+        return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu category thành công!", pages);
     }
 }
