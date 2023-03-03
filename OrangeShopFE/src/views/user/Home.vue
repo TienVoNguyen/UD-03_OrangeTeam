@@ -11,7 +11,7 @@
         <h2 class="section-title px-5"><span class="px-2">Thịnh hành</span></h2>
       </div>
       <div class="row px-xl-2 pb-3">
-        <product-card v-for="(product, index) in productDetail" :key="index" :product="product" />
+        <product-card v-for="(product, index) in productDetail" :key="index" :product-card="product" />
       </div>
     </div>
     <!-- Products End -->
@@ -41,7 +41,7 @@
         <h2 class="section-title px-5"><span class="px-2">Mới cập nhật</span></h2>
       </div>
       <div class="row px-xl-2 pb-3">
-        <product-card v-for="(product, index) in productDetail" :key="index" :product="product" />
+        <product-card v-for="(product, index) in productDetail" :key="index" :product-card="product" />
       </div>
     </div>
   </el-main>

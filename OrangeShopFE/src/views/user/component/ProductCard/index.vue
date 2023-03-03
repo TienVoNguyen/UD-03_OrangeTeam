@@ -41,7 +41,7 @@ import userCommon from '@/views/user/Mixin/user-mixin'
 export default {
   mixins: [baseCommon, userCommon],
   props: {
-    product: {
+    productCard: {
       type: Object,
       require: true,
       default(rawProps) {

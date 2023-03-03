@@ -23,6 +23,35 @@ export default {
         price2: '203233',
         quantity: 30
       },
+      productCart: [
+        {
+          id: 1,
+          name: 'Colorful Stylish Shirt',
+          size: { id: 1, name: 'XL' },
+          color: { id: 1, name: 'Black' },
+          price1: '232312',
+          price2: '203233',
+          quantity: 30
+        },
+        {
+          id: 2,
+          name: 'Colorful Stylish Shirt 2',
+          size: { id: 2, name: 'L' },
+          color: { id: 2, name: 'Blue' },
+          price1: '232312',
+          price2: '203233',
+          quantity: 23
+        },
+        {
+          id: 3,
+          name: 'Colorful Stylish Shirt 3',
+          size: { id: 3, name: 'XXL' },
+          color: { id: 3, name: 'Gray' },
+          price1: '232312',
+          price2: '203233',
+          quantity: 23
+        }
+      ],
       productDetail: [
         {
           id: 1,

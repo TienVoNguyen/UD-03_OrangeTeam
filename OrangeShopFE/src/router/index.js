@@ -143,12 +143,25 @@ export const constantRoutes = [
     component: UserLayout,
     redirect: 'profile',
     hidden: true,
+    meta: { title: 'User', icon: 'user', noCache: true },
     children: [
       {
         path: 'profile',
         component: () => import('@/views/profile/index'),
         name: 'User Profile',
         meta: { title: 'User Profile', icon: 'user', noCache: true }
+      },
+      {
+        path: 'shopping-cart',
+        component: () => import('@/views/user/ShoppingCart'),
+        name: 'Shopping Cart',
+        meta: { title: 'Shopping Cart', icon: 'shopping', noCache: true }
+      },
+      {
+        path: 'checkout',
+        component: () => import('@/views/user/Checkout'),
+        name: 'Checkout',
+        meta: { title: 'Checkout', icon: 'money', noCache: true }
       }
     ]
   }
