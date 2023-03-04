@@ -1,5 +1,6 @@
 package com.orange.domain.dto;
 
+import com.orange.domain.model.Village;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import java.io.Serializable;
 @Data
 public class AddressDTO extends BaseEntityDTO implements Serializable {
     @NotNull
-    private Long villageId;
+    private Village village;
     @Size(max = 205)
     private String addressLine1;
     @Size(max = 205)
