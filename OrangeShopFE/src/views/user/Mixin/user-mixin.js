@@ -1,4 +1,5 @@
 import { mapGetters } from 'vuex'
+import { getCities } from '@/api/goog-remote-search'
 export default {
   data() {
     return {
@@ -203,7 +204,8 @@ export default {
         { id: 5, name: 'Green' }
       ],
       price1: '232312',
-      price2: '203233'
+      price2: '203233',
+      citis: []
     }
   },
   computed: {
@@ -221,6 +223,14 @@ export default {
     }
   },
   created() {
+    getCities().then(res => {
+      this.citis = res.data.data.map(city => {
+        return {
+          id: city.ProvinceID,
+          name: city.ProvinceName
+        }
+      })
+    })
   },
   methods: {
     addToCart(product, size, color, quantity) {

@@ -7,7 +7,15 @@
     <div class="container-fluid pt-5">
       <div class="row px-xl-5">
         <div class="col-lg-6">
-          <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
+          <el-row type="flex" class="row-bg">
+            <el-col :span="12">
+              <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
+            </el-col>
+            <el-col :span="12">
+              <h4 class="font-weight-semi-bold mb-4 d-flex justify-content-end">
+                <el-button type="primary" icon="el-icon-edit" round @click="dialogTableVisible = true">Thay đổi</el-button></h4>
+            </el-col>
+          </el-row>
           <div class="row">
             <div class="col-md-6 form-group">
               <label>Họ tên:</label>
@@ -112,6 +120,149 @@
       </div>
     </div>
     <!-- Checkout End -->
+    <el-dialog v-el-drag-dialog :visible.sync="dialogTableVisible" title="Shipping address" :close-on-click-modal="false">
+      <el-tabs v-model="activeName">
+        <el-tab-pane name="addressList" label="Danh sách">
+          <el-table :data="gridData">
+            <el-table-column property="date" label="Date" width="150" />
+            <el-table-column property="name" label="Name" width="200" />
+            <el-table-column property="address" label="Address" />
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane name="addAddress" label="Thêm địa chỉ">
+          <ValidationObserver ref="observer" v-slot="{ invalid, handleSubmit }">
+            <el-form ref="addressForm" :model="addressForm" label-position="top">
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <ValidationProvider v-slot="{ errors }" rules="required">
+                    <el-form-item :error="messageError('Họ tên', errors[0])">
+                      <template v-slot:label><label><span class="svg-container">Họ tên<span
+                        class="text-danger"
+                      > *</span></span></label></template>
+                      <el-input v-model="addressForm.fullName" />
+                    </el-form-item>
+                  </ValidationProvider>
+                </div>
+                <div class="col-md-6 form-group">
+                  <ValidationProvider v-slot="{ errors }" rules="required|phone">
+                    <el-form-item :error="messageError('Số điện thoại', errors[0])">
+                      <template v-slot:label><label><span class="svg-container">Số điện thoại<span
+                        class="text-danger"
+                      > *</span></span></label></template>
+                      <el-input v-model="addressForm.phoneNumber" />
+                    </el-form-item>
+                  </ValidationProvider>
+                </div>
+                <div class="col-md-12 form-group">
+                  <ValidationProvider v-slot="{ errors }" rules="required">
+                    <el-form-item :error="messageError('Địa chỉ', errors[0])">
+                      <template v-slot:label><label><span class="svg-container">Địa chỉ<span
+                        class="text-danger"
+                      > *</span></span></label></template>
+                      <el-input
+                        v-model="addressForm.address"
+                        type="textarea"
+                        :rows="4"
+                      />
+                    </el-form-item>
+                  </ValidationProvider>
+                </div>
+                <div class="col-md-4">
+                  <ValidationProvider v-slot="{ errors }" rules="requiredSelect">
+                    <el-form-item :error="messageError('Phường/xã', errors[0])">
+                      <template v-slot:label><label><span class="svg-container">Phường/xã<span
+                        class="text-danger"
+                      > *</span></span></label></template>
+                      <el-select
+                        v-model="addressForm.village"
+                        class="w-100"
+                        placeholder="Chọn phường/xã"
+                        value-key="id"
+                        filterable
+                        remote
+                        reserve-keyword
+                        :remote-method="remoteVillage"
+                        :loading="loading"
+                      >
+                        <el-option
+                          v-for="(item, index) in listVillage"
+                          :key="index"
+                          :label="item.name"
+                          :value="item"
+                        />
+                      </el-select>
+                    </el-form-item>
+                  </ValidationProvider>
+                </div>
+                <div class="col-md-4 form-group">
+                  <ValidationProvider v-slot="{ errors }" rules="requiredSelect">
+                    <el-form-item :error="messageError('Quận/Huyện', errors[0])">
+                      <template v-slot:label><label><span class="svg-container">Quận/Huyện<span
+                        class="text-danger"
+                      > *</span></span></label></template>
+                      <el-select
+                        v-model="addressForm.district"
+                        class="w-100"
+                        placeholder="Chọn quận/huyện"
+                        value-key="id"
+                        filterable
+                        remote
+                        reserve-keyword
+                        :remote-method="remoteDistrict"
+                        :loading="loading"
+                      >
+                        <el-option
+                          v-for="(item, index) in listDistrict"
+                          :key="index"
+                          :label="item.name"
+                          :value="item"
+                        />
+                      </el-select>
+                    </el-form-item>
+                  </ValidationProvider>
+                </div>
+                <div class="col-md-4 form-group">
+                  <ValidationProvider v-slot="{ errors }" rules="requiredSelect">
+                    <el-form-item :error="messageError('Thành phố', errors[0])">
+                      <template v-slot:label><label><span class="svg-container">Thành phố<span
+                        class="text-danger"
+                      > *</span></span></label></template>
+                      <el-select
+                        v-model="addressForm.city"
+                        class="w-100"
+                        placeholder="Chọn thành phố"
+                        value-key="id"
+                        filterable
+                        remote
+                        reserve-keyword
+                        :remote-method="remoteCity"
+                        :loading="loading"
+                      >
+                        <el-option
+                          v-for="(item, index) in listAddress"
+                          :key="index"
+                          :label="item.name"
+                          :value="item"
+                        />
+                      </el-select>
+                    </el-form-item>
+                  </ValidationProvider>
+                </div>
+              </div>
+            </el-form>
+            <el-button
+              icon="el-icon-position"
+              type="primary"
+              plain
+              style="text-transform: uppercase;"
+              :disabled="invalid"
+              @click="handleSubmit(submitForm)"
+            >Xác nhận
+            </el-button>
+          </ValidationObserver>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
   </el-main>
 </template>
 
@@ -121,25 +272,56 @@ import baseCommon from '@/utils/base-common'
 import horizontalScroll from 'el-table-horizontal-scroll'
 import userCommon from '@/views/user/Mixin/user-mixin'
 import PageHeader from '@/views/user/component/PageHeader'
+import elDragDialog from '@/directive/el-drag-dialog'
+import { searchAddress, getDistricts, getVillages } from '@/api/goog-remote-search'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 
-import { searchAddress } from '@/api/goog-remote-search'
 export default {
   name: 'DetailProduct',
   directives: {
-    horizontalScroll
+    horizontalScroll, elDragDialog
   },
-  components: { PageHeader },
+  components: { PageHeader, ValidationObserver, ValidationProvider },
   mixins: [baseCommon, userCommon, BaseValidate],
   data() {
     return {
+      addressForm: {
+        fullName: '',
+        phoneNumber: '',
+        address: '',
+        city: '',
+        district: '',
+        village: ''
+      },
+      listAddress: [],
+      listDistrict: [],
+      listVillage: [],
       size: '',
       color: '',
       quantity: 1,
-      differenceAddress: false,
       state: '',
       timeout: null,
       discount: 100000,
-      shipping: 10000
+      shipping: 10000,
+      activeName: 'addressList',
+      dialogTableVisible: false,
+      gridData: [{
+        date: '2016-05-02',
+        name: 'John Smith',
+        address: 'No.1518,  Jinshajiang Road, Putuo District'
+      }, {
+        date: '2016-05-04',
+        name: 'John Smith',
+        address: 'No.1518,  Jinshajiang Road, Putuo District'
+      }, {
+        date: '2016-05-01',
+        name: 'John Smith',
+        address: 'No.1518,  Jinshajiang Road, Putuo District'
+      }, {
+        date: '2016-05-03',
+        name: 'John Smith',
+        address: 'No.1518,  Jinshajiang Road, Putuo District'
+      }]
     }
   },
   watch: {
@@ -153,7 +335,30 @@ export default {
       }
     }
   },
+  created() {
+  },
   methods: {
+    submitForm() {
+      this.$confirm(
+        'Bạn có chắc chắn muốn gửi tin này không?',
+        'Cảnh báo',
+        {
+          confirmButtonText: 'Đồng ý',
+          cancelButtonText: 'Huỷ',
+          type: 'warning',
+          center: true
+        }
+      ).then(async() => {
+        console.log('oke gui di')
+        // const response = await functionService.deleteFunction(data.id)
+        // if (response.code === 200) {
+        //   this.notifyInfo('Thông tin', response.message)
+        //   this.getFunctions()
+        // }
+      }).catch(action => {
+        console.log('loi roi', action)
+      })
+    },
     querySearchAsync(queryString, cb) {
       searchAddress(queryString).then(res => {
         const link = res.data.predictions
@@ -169,8 +374,70 @@ export default {
         }
       })
     },
-    handleSelect(item) {
-      console.log(2, item)
+    remoteCity(queryString) {
+      if (queryString !== '') {
+        this.loading = true
+        setTimeout(() => {
+          this.loading = false
+          this.listAddress = this.citis.filter(item => {
+            const searchNormalized = queryString.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase().replace(/[^a-z0-9]/g, '')
+            return item.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase().replace(/[^a-z0-9]/g, '').indexOf(searchNormalized) !== -1
+          })
+        }, 200)
+      } else {
+        this.listAddress = []
+      }
+    },
+    remoteDistrict(queryString) {
+      if (queryString !== '') {
+        this.loading = true
+        getDistricts(this.addressForm.city.id).then(res => {
+          this.loading = false
+          const districts = res.data.data
+          console.log(districts)
+          this.listDistrict = districts.filter(item => {
+            const searchNormalized = queryString.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase().replace(/[^a-z0-9]/g, '')
+            return item.DistrictName.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase().replace(/[^a-z0-9]/g, '').indexOf(searchNormalized) !== -1
+          }).map(city => {
+            return {
+              id: city.DistrictID,
+              name: city.DistrictName
+            }
+          })
+        })
+      } else {
+        this.listDistrict = []
+      }
+    },
+    remoteVillage(queryString) {
+      if (queryString !== '') {
+        this.loading = true
+        getVillages(this.addressForm.district.id).then(res => {
+          this.loading = false
+          const villages = res.data.data
+          console.log(villages)
+          this.listVillage = villages.filter(item => {
+            const searchNormalized = queryString.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase().replace(/[^a-z0-9]/g, '')
+            return item.WardName.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase().replace(/[^a-z0-9]/g, '').indexOf(searchNormalized) !== -1
+          }).map(city => {
+            return {
+              id: city.WardCode,
+              name: city.WardName
+            }
+          })
+        })
+      } else {
+        this.listVillage = []
+      }
+    },
+    handleDrag() {
+      this.$refs.select.blur()
     },
     handleClick(tab, event) {
       console.log(tab, event)
@@ -308,5 +575,11 @@ input[type="month"].form-control {
 }
 .el-checkbox__label {
   font-size: 1.5em;
+}
+label {
+   margin-bottom: 0;
+}
+.el-form--label-top .el-form-item__label {
+  padding-bottom:0;
 }
 </style>

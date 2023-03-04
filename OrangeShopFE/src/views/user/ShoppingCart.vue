@@ -44,7 +44,7 @@
             <div class="card-footer border-secondary bg-transparent">
               <div class="d-flex justify-content-between mt-2">
                 <h5 class="font-weight-bold">Total</h5>
-                <h5 class="font-weight-bold">{{ subTotal - discount | currency('VND', 0, 'đ', '.', ',') }}</h5>
+                <h5 class="font-weight-bold">{{ subTotal | currency('VND', 0, 'đ', '.', ',') }}</h5>
               </div>
               <router-link to="/user/checkout" class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</router-link>
             </div>
