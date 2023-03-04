@@ -5,7 +5,8 @@
         <img class="img-fluid w-100" src="@/assets/img/product-6.jpg" alt="">
         <h6 class="text-truncate mb-3 d-flex justify-content-center">{{ product.name }}</h6>
         <div class="d-flex justify-content-center">
-          <h6>{{ product.price2 | currency('VND', 0, 'đ', '.', ',') }}</h6><h6 class="text-muted ml-2"><del>{{ product.price1 | currency('VND', 0, 'đ', '.', ',') }}</del></h6>
+          <h6>{{ product.price2 | currency('VND', 0, 'đ', '.', ',') }}</h6>
+          <h6 class="text-muted ml-2"><del>{{ product.price1 | currency('VND', 0, 'đ', '.', ',') }}</del></h6>
         </div>
       </div>
       <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
@@ -40,7 +41,7 @@ import userCommon from '@/views/user/Mixin/user-mixin'
 export default {
   mixins: [baseCommon, userCommon],
   props: {
-    product: {
+    productCard: {
       type: Object,
       require: true,
       default(rawProps) {
@@ -78,4 +79,18 @@ export default {
 .el-radio-button--mini .el-radio-button__inner {
   padding: 5px 12px;
 }
+.product-img img {
+  transition: .5s;
+}
+
+.product-img img:hover {
+  transform: scale(1.2);
+}
+
+.product-item .linkCard:hover {
+  color: #D19C97 !important;
+  text-decoration: none;
+  background: none !important;
+}
+
 </style>

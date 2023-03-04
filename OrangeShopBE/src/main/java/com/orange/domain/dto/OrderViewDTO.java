@@ -12,7 +12,7 @@ public class OrderViewDTO {
     private String createDate;
     private Integer productQuantity;
     private Double orderTotal;
-    private OrderStatus status;
+    private OrderStatus orderStatus;
     private AddressDTO address;
     private ShippingMethod shippingMethod;
     private Set<OrderDetailViewDTO> orderDetailViews;

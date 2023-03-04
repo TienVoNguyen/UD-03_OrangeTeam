@@ -1,4 +1,5 @@
 import { mapGetters } from 'vuex'
+import { getCities } from '@/api/goog-remote-search'
 export default {
   data() {
     return {
@@ -23,6 +24,35 @@ export default {
         price2: '203233',
         quantity: 30
       },
+      productCart: [
+        {
+          id: 1,
+          name: 'Colorful Stylish Shirt',
+          size: { id: 1, name: 'XL' },
+          color: { id: 1, name: 'Black' },
+          price1: '232312',
+          price2: '203233',
+          quantity: 30
+        },
+        {
+          id: 2,
+          name: 'Colorful Stylish Shirt 2',
+          size: { id: 2, name: 'L' },
+          color: { id: 2, name: 'Blue' },
+          price1: '232312',
+          price2: '203233',
+          quantity: 23
+        },
+        {
+          id: 3,
+          name: 'Colorful Stylish Shirt 3',
+          size: { id: 3, name: 'XXL' },
+          color: { id: 3, name: 'Gray' },
+          price1: '232312',
+          price2: '203233',
+          quantity: 23
+        }
+      ],
       productDetail: [
         {
           id: 1,
@@ -174,7 +204,8 @@ export default {
         { id: 5, name: 'Green' }
       ],
       price1: '232312',
-      price2: '203233'
+      price2: '203233',
+      citis: []
     }
   },
   computed: {
@@ -184,9 +215,22 @@ export default {
       'device',
       'roles',
       'token'
-    ])
+    ]),
+    subTotal() {
+      return this.productCart
+        // eslint-disable-next-line no-return-assign
+        .map(item => item.quantity * item.price2).reduce((total, qty) => total += qty, 0)
+    }
   },
   created() {
+    getCities().then(res => {
+      this.citis = res.data.data.map(city => {
+        return {
+          id: city.ProvinceID,
+          name: city.ProvinceName
+        }
+      })
+    })
   },
   methods: {
     addToCart(product, size, color, quantity) {

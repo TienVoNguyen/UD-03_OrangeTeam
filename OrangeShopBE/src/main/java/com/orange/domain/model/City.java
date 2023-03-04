@@ -15,10 +15,13 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class City extends BaseEntity{
-    @NotNull
+public class City {
+    /*@NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Region region;
+    private Region region;*/
+
+    @Id
+    private Long id;
 
     @Size(max = 45)
     @NotNull

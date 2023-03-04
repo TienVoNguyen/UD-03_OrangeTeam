@@ -4,6 +4,7 @@ import com.orange.common.payload.Page;
 import com.orange.common.payload.Result;
 import com.orange.exception.EntityIsEmptyException;
 import com.orange.domain.dto.OrderDTO;
+import com.orange.payload.request.UpdateOrderStatus;
 import com.orange.services.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +41,11 @@ public class OrderController {
     @PostMapping("/create-order")
     public Result<?> createOrder(@RequestBody OrderDTO orderDTO){
         OrderDTO result = this.orderService.create(orderDTO);
-        return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu order thành công!", result);
+        return Result.result(HttpStatus.OK.value(), "Tạo mới order thành công!", result);
+    }
+    @PostMapping("/update-status")
+    public Result<?> updateOrderStatus(@RequestBody UpdateOrderStatus orderStatus){
+        OrderDTO result = this.orderService.updateOrderStatus(orderStatus);
+        return Result.result(HttpStatus.OK.value(), "Cập nhật trạng thái order thành công!", result);
     }
 }
