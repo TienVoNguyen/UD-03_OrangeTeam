@@ -42,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         final UserDetails userDetails = loadUserByUsername(username);
         User user = userDAO.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
         String newGeneratedToken = jwtUtil.generateJwtToken((UserDetailsImpl) userDetails);
-        Set<String> roles = user.getRoles().stream().map(role -> role.getName().name()).collect(Collectors.toSet());
+        Set<String> roles = user.getRoles().stream().map(role -> role.getName().getValue()).collect(Collectors.toSet());
         return JwtRespone.builder()
                 .jwtToken(newGeneratedToken)
                 .roles(roles)

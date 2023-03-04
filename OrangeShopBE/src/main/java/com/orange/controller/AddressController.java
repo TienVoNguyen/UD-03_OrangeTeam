@@ -13,6 +13,7 @@ import com.orange.services.IAddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +24,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/test/address")
+@RequestMapping("/address")
 @RequiredArgsConstructor
 public class AddressController {
 
@@ -39,11 +40,11 @@ public class AddressController {
 
     @GetMapping("/by-user")
     public Result<?> getAddressByUser() {
-        String username = getUsername();
-        if (username.isEmpty()) {
+        Optional<User> user = userRepository.findByUsername(getUsername());
+        if (user.isEmpty()) {
             GlobalException.throwException(EntityType.sysUser, ExceptionType.ENTITY_NOT_FOUND, "unauthenticated");
         }
-        List<?> list = this.addressService.fillAddressByUser(username);
+        List<AddressDTO> list = this.addressService.fillAddressByUser(user.get().getId());
         return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu adddress thành công!", list);
     }
 

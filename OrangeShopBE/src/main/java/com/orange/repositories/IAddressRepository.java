@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface IAddressRepository extends JpaRepository<Address, Long> {
     Optional<Address> findByAddressLine1AndAddressLine2AndVillageId(String addressLine1, String addressLine2, Long villageId);
 
-    @Query("FROM UserAddress ua where ua.user.username =:username")
-    List<Address> findAddressByUser(@Param("username")String username);
+    @Query("FROM Address a JOIN a.userAddresses ua WHERE ua.user.id = :id")
+    List<Address> findAddressByUser(@Param("id")Long id);
 }

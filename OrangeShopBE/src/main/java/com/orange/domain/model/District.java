@@ -21,7 +21,6 @@ public class District {
     private Long id;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JsonIgnore
     private City city;
 
     @Size(max = 45)

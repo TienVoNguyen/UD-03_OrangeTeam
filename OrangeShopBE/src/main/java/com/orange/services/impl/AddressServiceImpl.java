@@ -63,9 +63,9 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public List<?> fillAddressByUser(String username) {
+    public List<AddressDTO> fillAddressByUser(Long userId) {
 
-        List<Address> result = this.addressRepository.findAddressByUser(username);
+        List<Address> result = this.addressRepository.findAddressByUser(userId);
         List<AddressDTO> viewDTOList = addressMapper.toDtoList(result);
         return viewDTOList;
     }
@@ -88,7 +88,7 @@ public class AddressServiceImpl implements IAddressService {
             AddressDTO newAddressDTO = create(addressDTO);
             userAddress.setAddress(addressMapper.toEntity(newAddressDTO));
         }
-        Optional<UserAddress> userAddressOptional = this.userAddressRepository.findByUserAndAddress(userAddress.getUser(), userAddress.getAddress());
+        Optional<UserAddress> userAddressOptional = this.userAddressRepository.findFirstByUser_IdAndAddress_Id(userAddress.getUser().getId(), userAddress.getAddress().getId());
         if (userAddressOptional.isPresent()) {
             GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_ALREADY_EXIST, "Address đã tồn tại!");
         }
