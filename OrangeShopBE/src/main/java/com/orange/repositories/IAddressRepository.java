@@ -1,14 +1,16 @@
 package com.orange.repositories;
 
 import com.orange.domain.model.Address;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface IAddressRepository extends JpaRepository<Address, Long> {
+import java.util.List;
+import java.util.Optional;
 
-    @Query("FROM UserAddress ua where ua.user.id =:userId")
-    Page<Address> findAddressByUser(@Param("id")Long userId, Pageable pageable);
+public interface IAddressRepository extends JpaRepository<Address, Long> {
+    Optional<Address> findByAddressLine1AndAddressLine2AndVillageId(String addressLine1, String addressLine2, Long villageId);
+
+    @Query("FROM UserAddress ua where ua.user.username =:username")
+    List<Address> findAddressByUser(@Param("username")String username);
 }

@@ -32,6 +32,10 @@ public class User extends BaseEntity{
     @Column(name = "email", length = 105)
     private String email;
 
+    @Size(max = 105)
+    @Column(name = "avatar", length = 105)
+    private String avatar;
+
     @Column(name = "phone")
     private String phone;
 

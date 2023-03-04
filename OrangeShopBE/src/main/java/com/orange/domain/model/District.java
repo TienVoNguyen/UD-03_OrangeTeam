@@ -15,8 +15,10 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class District extends BaseEntity{
+public class District {
 
+    @Id
+    private Long id;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonIgnore
