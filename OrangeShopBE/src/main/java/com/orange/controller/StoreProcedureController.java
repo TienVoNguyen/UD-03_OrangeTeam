@@ -1,55 +1,44 @@
 package com.orange.controller;
 
-import com.orange.common.payload.Result;
+import com.orange.domain.mapper.IStoreProcedure;
 import com.orange.domain.mapper.impl.StorePorcedureImpl;
 import com.orange.domain.model.ModelProcedure.OgetCountAllStatus;
 import com.orange.domain.model.ModelProcedure.OgetTopProductByStt;
-import org.springframework.http.HttpStatus;
+import net.bytebuddy.implementation.bytecode.constant.DefaultValue;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("admin/procedure")
+@RequestMapping("test/admin/procedure")
 public class StoreProcedureController {
+    private final IStoreProcedure procedureService;
 
-    private StorePorcedureImpl storeService;
-
-
-    @GetMapping("/topProducts")
-    public Result<?> getTopProductsByStatusAndDate(
-            @RequestParam String fromDate,
-            @RequestParam String toDate,
-            @RequestParam int top,
-            @RequestParam int status
-    ) {
-        List<OgetTopProductByStt> result = storeService.getTopProduct(fromDate,toDate,top,status);
-        return Result.result(HttpStatus.OK.value(),"Lấy Dữ Liệu Thành Công",result );
+    @Autowired
+    public StoreProcedureController(StorePorcedureImpl procedureService) {
+        this.procedureService = procedureService;
     }
 
-
-
-    @GetMapping("/countAllStatus")
-    private Result<?> getCountAllStatus(@RequestParam String fromDate,
-                                        @RequestParam String toDate){
-        List<OgetCountAllStatus> result = storeService.getCountAllStatus(fromDate,toDate);
-        return Result.result(HttpStatus.OK.value(),"Lấy Dữ Liệu Thành Công",result );
+    @GetMapping("/getcountallstatusbydate")
+    public OgetCountAllStatus getOrderStatus(@RequestParam(defaultValue = "1/1/2021") String fromDate, @RequestParam(defaultValue = "1/1/2025") String toDate) {
+        return procedureService.getCountAllStatus(fromDate, toDate);
     }
 
-
+    @GetMapping("/topproductbystt")
+    public List<OgetTopProductByStt> getTopProducts(@RequestParam(defaultValue="1")         Integer status,
+                                                    @RequestParam(defaultValue="1/1/2021")  String fromDate,
+                                                    @RequestParam(defaultValue="1/1/2023")  String toDate,
+                                                    @RequestParam(defaultValue="10")        Integer top) {
+        return procedureService.getTopProducts(status, fromDate, toDate, top);
+    }
 
     @GetMapping("/totalAmountByStatus")
-    public Result<?> getTotalAmountByStatus(
-            @RequestParam String fromDate,
-            @RequestParam String toDate,
-            @RequestParam Integer status
-    ) {
-        Double result = storeService.getTotalAmountByStatus(fromDate,toDate,status);
-        return Result.result(HttpStatus.OK.value(),"Lấy Dữ Liệu Thành Công",result);
+    public double getTotalAmountByStatus(@RequestParam(defaultValue="1/1/2021") String fromDate, @RequestParam(defaultValue="1/1/2023") String toDate
+            , @RequestParam(defaultValue="1") int status) {
+        return procedureService.getTotalAmountByStatus(fromDate, toDate, status);
     }
-
-
-
 
 }
