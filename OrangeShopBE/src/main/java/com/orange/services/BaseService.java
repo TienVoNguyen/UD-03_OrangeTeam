@@ -7,14 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface BaseService<T, ID>{
 
-    @Async
-    @Transactional
     T create(T dto);
-    @Async
-    @Transactional
     T update(T dto);
-    @Async
-    @Transactional
     T delete(T dto);
 
     /**

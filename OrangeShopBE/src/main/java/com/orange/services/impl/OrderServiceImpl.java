@@ -4,6 +4,7 @@ import com.orange.common.payload.Page;
 import com.orange.domain.dto.OrderViewDTO;
 import com.orange.domain.mapper.IOrderViewMapper;
 import com.orange.domain.model.*;
+import com.orange.domain.model.GHN.GHNShippingOrder;
 import com.orange.exception.EntityNotFoundException;
 import com.orange.domain.mapper.IOrderMapper;
 import com.orange.domain.dto.OrderDTO;
@@ -15,6 +16,7 @@ import com.orange.repositories.IOrderRepository;
 import com.orange.repositories.IProductDetailRepository;
 import com.orange.repositories.IProductRepository;
 import com.orange.services.IOrderService;
+import com.orange.services.IShippingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Pageable;
@@ -27,13 +29,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OrderServiceImpl implements IOrderService {
 
     private final IOrderRepository orderRepository;
     private final IOrderDetailRepository orderDetailRepository;
-    private final IOrderMapper  orderMapper;
+    private final IOrderMapper orderMapper;
     private final IOrderViewMapper orderViewMapper;
-    private final IProductRepository productRepository;
+    private final IShippingService shippingService;
     private final IProductDetailRepository productDetailRepository;
 
 
@@ -92,14 +95,13 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public Page<?> fillAll(Pageable pageable){
+    public Page<?> fillAll(Pageable pageable) {
         org.springframework.data.domain.Page<Order> result = this.orderRepository.findAll(pageable);
         List<OrderViewDTO> viewDTOList = result.getContent()
                 .stream()
                 .map(orderViewMapper::toDto)
                 .collect(Collectors.toList());
-        int totalPages = result.getTotalPages();
-        return Page.of(totalPages, result.getNumber(),totalPages, Math.toIntExact(result.getTotalElements()), viewDTOList);
+        return Page.of(result.getSize(), result.getNumber(), result.getTotalPages(), Math.toIntExact(result.getTotalElements()), viewDTOList);
     }
 
     @Override
@@ -126,6 +128,13 @@ public class OrderServiceImpl implements IOrderService {
         try {
             Order order = this.getOrderById(orderStatus.getOrderId());
             order.setOrderStatus(new OrderStatus(orderStatus.getOrderStatusId()));
+            if (orderStatus.getOrderStatusId() == EOrderStatus.CONFIRMED.getId()) {
+                GHNShippingOrder ghnShippingOrder = new GHNShippingOrder();
+                ghnShippingOrder.setToName(order.getConsigneeName());
+                ghnShippingOrder.setToPhone(order.getConsigneePhone());
+
+                String shippingCode = this.shippingService.createShippingOrder(ghnShippingOrder).getOrderCode();
+            }
             return orderMapper.toDto(this.orderRepository.save(order));
         } catch (DataAccessException e) {
             throw new OrderUpdateException("Có lỗi xảy ra trong quá trình cập nhật trạng thái");
