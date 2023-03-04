@@ -1,9 +1,12 @@
 package com.orange.services;
 
-import com.orange.common.payload.Page;
 import com.orange.domain.dto.AddressDTO;
-import org.springframework.data.domain.Pageable;
+import com.orange.domain.model.User;
+
+import java.util.List;
 
 public interface IAddressService extends BaseService<AddressDTO, Long>{
-    Page<?> fillAddressByUser(Long userId, Pageable pageable);
+    List<AddressDTO> fillAddressByUser(Long userId);
+
+    AddressDTO addUserAddress(User user, AddressDTO addressDTO);
 }

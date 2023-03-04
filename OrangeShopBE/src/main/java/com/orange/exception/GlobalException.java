@@ -80,6 +80,8 @@ public class GlobalException {
             return new EntityNotFoundException(format(messageTemplate, args));
         } else if (ExceptionType.DUPLICATE_ENTITY.equals(exceptionType)) {
             return new DuplicateEntityException(format(messageTemplate, args));
+        } else if (ExceptionType.ENTITY_ALREADY_EXIST.equals(exceptionType)) {
+            return new EntityAlreadyExistException(format(messageTemplate, args));
         }
         return new RuntimeException(format(messageTemplate, args));
     }
