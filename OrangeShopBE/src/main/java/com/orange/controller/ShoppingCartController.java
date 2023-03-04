@@ -23,9 +23,9 @@ public class ShoppingCartController {
     public Result<?> add(@RequestBody CartDTO cartDTO) {
         return Result.success("Thêm sản phẩm vào giỏ hàng thành công!", this.redisUtils.save(cartDTO));
     }
-    @GetMapping("/{id}")
-    public Result<?> getAllProducts(@PathVariable String id) {
-        return Result.success("Xem sản phẩm trong giỏ hàng thành công!", this.redisUtils.getAll(id));
+    @GetMapping("/{key}")
+    public Result<?> getAllProducts(@PathVariable String key) {
+        return Result.success("Xem sản phẩm trong giỏ hàng thành công!", this.redisUtils.getAll(key));
     }
 
     @GetMapping("/{key}/{id}")

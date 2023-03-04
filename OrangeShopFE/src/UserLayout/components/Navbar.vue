@@ -145,6 +145,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import avatar from 'element-ui/packages/avatar'
 
 export default {
   components: {
@@ -166,6 +167,9 @@ export default {
     }
   },
   created() {
+    if (!avatar) {
+      avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+    }
   },
   methods: {
     toggleSideBar() {
