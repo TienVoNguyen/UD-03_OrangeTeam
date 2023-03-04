@@ -41,6 +41,8 @@ public class Order extends BaseEntity{
     @Column(name = "order_total")
     private Double orderTotal;
 
+    @Column(name = "shipping_code")
+    private String shippingCode;
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Address address;

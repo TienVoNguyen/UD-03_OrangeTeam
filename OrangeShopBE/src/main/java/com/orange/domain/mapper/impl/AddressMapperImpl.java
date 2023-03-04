@@ -17,14 +17,12 @@ public class AddressMapperImpl implements IAddressMapper {
     @Override
     public Address toEntity(AddressDTO dto) {
         Address entity = modelMapper.map(dto, Address.class);
-        entity.setVillage(new Village(dto.getVillageId()));
         return entity;
     }
 
     @Override
     public AddressDTO toDto(Address entity) {
         AddressDTO dto = modelMapper.map(entity, AddressDTO.class);
-        dto.setVillageId(entity.getVillage().getId());
         return dto;
     }
 }

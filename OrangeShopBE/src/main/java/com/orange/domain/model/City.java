@@ -16,9 +16,9 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class City extends BaseEntity{
-    @NotNull
+    /*@NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Region region;
+    private Region region;*/
 
     @Size(max = 45)
     @NotNull
