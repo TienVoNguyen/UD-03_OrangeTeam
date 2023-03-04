@@ -10,7 +10,7 @@ import _ from 'lodash'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login', '/auth-redirect', '/home', '/product'] // no redirect whitelist
+const whiteList = ['/login', '/auth-redirect', '/home', '/product/view-detail'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar

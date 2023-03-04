@@ -3,8 +3,9 @@ package com.orange.controller;
 
 import com.orange.common.payload.Result;
 import com.orange.payload.request.JwtRequest;
-import com.orange.payload.response.JwtRespone;
+import com.orange.payload.response.UserInfoRespone;
 import com.orange.security.services.UserDetailsServiceImpl;
+import com.orange.services.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,21 +14,40 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @CrossOrigin
 @RequestMapping
 @RequiredArgsConstructor
-public class AuthenticateController {
+public class AccountController {
 
     private final UserDetailsServiceImpl userDetailService;
     private final AuthenticationManager authenticationManager;
 
+    private final IUserService userService;
+
     @PostMapping("/authenticate")
-    public Result<?> createJwtToken(@RequestBody JwtRequest jwtRequest) throws Exception {
+    public Result<?> authenticate(@RequestBody JwtRequest jwtRequest) throws Exception {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(jwtRequest.getUsername(), jwtRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return Result.result(HttpStatus.OK.value(), "Đăng nhập thành công", userDetailService.createJwtToken(jwtRequest));
+        Map<String, String> jsonToken = new HashMap<>();
+        jsonToken.put("token", userDetailService.createJwtToken(jwtRequest));
+        return Result.result(HttpStatus.OK.value(), "Đăng nhập thành công", jsonToken);
+    }
+
+    @GetMapping("/sign-up")
+    public Result<?>  signUp() throws Exception {
+
+        return authenticate(new JwtRequest("a","a"));
+    }
+    @GetMapping("/info-user")
+    public Result<?>  getUserInfo() throws Exception {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserInfoRespone info = this.userService.getUserInfo(username);
+        return Result.result(HttpStatus.OK.value(), "Lấy thông tin người dùng thành công", info);
     }
 }

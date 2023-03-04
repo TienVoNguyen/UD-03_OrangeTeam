@@ -216,7 +216,6 @@ export default {
   watch: {
     quantity: function(newVal, oldVal) {
       this.quantity = String(this.quantity).replace(/\D/g, '')
-      console.log('message changed from', oldVal, 'to', newVal)
       if (newVal > this.product.quantity) {
         this.quantity = this.product.quantity
       }

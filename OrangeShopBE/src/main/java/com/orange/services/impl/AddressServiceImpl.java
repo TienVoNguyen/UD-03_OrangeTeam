@@ -90,7 +90,7 @@ public class AddressServiceImpl implements IAddressService {
         }
         Optional<UserAddress> userAddressOptional = this.userAddressRepository.findFirstByUser_IdAndAddress_Id(userAddress.getUser().getId(), userAddress.getAddress().getId());
         if (userAddressOptional.isPresent()) {
-            GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_ALREADY_EXIST, "Address đã tồn tại!");
+            throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_ALREADY_EXIST, "Address đã tồn tại!");
         }
         this.userAddressRepository.save(userAddress);
         return addressMapper.toDto(userAddress.getAddress());
