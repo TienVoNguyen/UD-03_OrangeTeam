@@ -31,14 +31,6 @@
           </table>
         </div>
         <div class="col-lg-4">
-          <form class="mb-5" action="">
-            <div class="input-group">
-              <input type="text" class="form-control p-4" placeholder="Coupon Code">
-              <div class="input-group-append">
-                <button class="btn btn-primary">Apply Coupon</button>
-              </div>
-            </div>
-          </form>
           <div class="card border-secondary mb-5">
             <div class="card-header bg-secondary border-0">
               <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
@@ -48,17 +40,13 @@
                 <h6 class="font-weight-medium">Subtotal</h6>
                 <h6 class="font-weight-medium">{{ subTotal | currency('VND', 0, 'đ', '.', ',') }}</h6>
               </div>
-              <div class="d-flex justify-content-between">
-                <h6 class="font-weight-medium">Discount</h6>
-                <h6 class="font-weight-medium">{{ discount | currency('VND', 0, 'đ', '.', ',') }}</h6>
-              </div>
             </div>
             <div class="card-footer border-secondary bg-transparent">
               <div class="d-flex justify-content-between mt-2">
                 <h5 class="font-weight-bold">Total</h5>
                 <h5 class="font-weight-bold">{{ subTotal - discount | currency('VND', 0, 'đ', '.', ',') }}</h5>
               </div>
-              <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
+              <router-link to="/user/checkout" class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</router-link>
             </div>
           </div>
         </div>
@@ -87,15 +75,7 @@ export default {
     return {
       size: '',
       color: '',
-      quantity: 1,
-      discount: 100000
-    }
-  },
-  computed: {
-    subTotal() {
-      return this.productCart
-        // eslint-disable-next-line no-return-assign
-        .map(item => item.quantity * item.price2).reduce((total, qty) => total += qty, 0)
+      quantity: 1
     }
   },
   methods: {

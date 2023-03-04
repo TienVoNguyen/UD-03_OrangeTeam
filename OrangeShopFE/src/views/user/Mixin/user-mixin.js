@@ -213,7 +213,12 @@ export default {
       'device',
       'roles',
       'token'
-    ])
+    ]),
+    subTotal() {
+      return this.productCart
+        // eslint-disable-next-line no-return-assign
+        .map(item => item.quantity * item.price2).reduce((total, qty) => total += qty, 0)
+    }
   },
   created() {
   },
