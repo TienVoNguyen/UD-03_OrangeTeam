@@ -44,7 +44,7 @@ public class AccountController {
 
         return authenticate(new JwtRequest("a","a"));
     }
-    @GetMapping("/info-user")
+    @GetMapping("/user/info")
     public Result<?>  getUserInfo() throws Exception {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         UserInfoRespone info = this.userService.getUserInfo(username);
