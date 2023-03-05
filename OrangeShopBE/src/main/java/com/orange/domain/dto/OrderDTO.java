@@ -24,6 +24,7 @@ public class OrderDTO extends BaseEntityDTO implements Serializable {
     @NotNull
     private String consigneePhone;
     private Double orderTotal;
+    private String shippingCode;
     private UserPaymentMethodDTO userPaymentMethod;
     private ShippingMethod shippingMethod;
     private OrderStatus orderStatus;
