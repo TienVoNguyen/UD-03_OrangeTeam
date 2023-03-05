@@ -33,7 +33,7 @@ public class AddressServiceImpl implements IAddressService {
     @Override
     public AddressDTO create(AddressDTO dto) {
         if(findByAddressDTO(dto).isPresent()) {
-            GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_ALREADY_EXIST, "Address already exists");
+            throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_ALREADY_EXIST, "Address already exists");
         };
 
         Address address = checkVillageDistrictCity(dto);
