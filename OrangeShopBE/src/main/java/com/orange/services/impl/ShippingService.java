@@ -48,7 +48,7 @@ public class ShippingService implements IShippingService {
     public GHNShippingOrderResponse createShippingOrder(GHNShippingOrder ghnShippingOrder) {
         HttpHeaders headers = getHttpHeaders();
         headers.set("ShopId", "121789");
-        HttpEntity requestEntity = new HttpEntity(headers);
+        HttpEntity<GHNShippingOrder> requestEntity = new HttpEntity<>(ghnShippingOrder, headers);
         try {
             return restTemplate.exchange
                             (
@@ -59,6 +59,7 @@ public class ShippingService implements IShippingService {
                             )
                     .getBody();
         } catch (RestClientException e) {
+            e.printStackTrace();
             throw new RuntimeException("Có gì đó sai sai =)))");
         }
     }
