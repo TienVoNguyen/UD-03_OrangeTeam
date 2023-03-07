@@ -1,5 +1,5 @@
 import { mapGetters } from 'vuex'
-import { getCities } from '@/api/goog-remote-search'
+import { getListProduct } from '@/api/product'
 export default {
   data() {
     return {
@@ -72,7 +72,8 @@ export default {
             { id: 5, name: 'Green' }
           ],
           price1: '232312',
-          price2: '203233'
+          price2: '203233',
+          img: 'product-6.jpg'
         },
         {
           id: 2,
@@ -87,7 +88,8 @@ export default {
             { id: 5, name: 'Green' }
           ],
           price1: '232312',
-          price2: '203233'
+          price2: '203233',
+          img: 'product-6.jpg'
         },
         {
           id: 3,
@@ -104,7 +106,8 @@ export default {
             { id: 5, name: 'Green' }
           ],
           price1: '232312',
-          price2: '203233'
+          price2: '203233',
+          img: 'product-6.jpg'
         },
         {
           id: 4,
@@ -121,7 +124,8 @@ export default {
             { id: 5, name: 'Green' }
           ],
           price1: '232312',
-          price2: '203233'
+          price2: '203233',
+          img: 'product-6.jpg'
         },
         {
           id: 5,
@@ -136,7 +140,8 @@ export default {
             { id: 5, name: 'Green' }
           ],
           price1: '232312',
-          price2: '203233'
+          price2: '203233',
+          img: 'product-6.jpg'
         },
         {
           id: 6,
@@ -154,7 +159,8 @@ export default {
             { id: 4, name: 'Sky' }
           ],
           price1: '232312',
-          price2: '203233'
+          price2: '203233',
+          img: 'product-6.jpg'
         },
         {
           id: 7,
@@ -170,7 +176,8 @@ export default {
             { id: 5, name: 'Green' }
           ],
           price1: '232312',
-          price2: '203233'
+          price2: '203233',
+          img: 'product-6.jpg'
         },
         {
           id: 8,
@@ -186,26 +193,14 @@ export default {
             { id: 3, name: 'Yellow' }
           ],
           price1: '232312',
-          price2: '203233'
+          price2: '203233',
+          img: 'product-6.jpg'
         }
       ],
-      sizes: [
-        { id: 1, name: 'XS' },
-        { id: 2, name: 'S' },
-        { id: 3, name: 'M' },
-        { id: 4, name: 'L' },
-        { id: 5, name: 'XL' }
-      ],
-      colors: [
-        { id: 1, name: 'Black' },
-        { id: 2, name: 'Blue' },
-        { id: 3, name: 'Yellow' },
-        { id: 4, name: 'Sky' },
-        { id: 5, name: 'Green' }
-      ],
+      sizes: [],
+      colors: [],
       price1: '232312',
-      price2: '203233',
-      citis: []
+      price2: '203233'
     }
   },
   computed: {
@@ -223,14 +218,25 @@ export default {
     }
   },
   created() {
-    getCities().then(res => {
-      this.citis = res.data.data.map(city => {
-        return {
-          id: city.ProvinceID,
-          name: city.ProvinceName
-        }
+    const params = {
+      page: 1,
+      size: 8
+    }
+    getListProduct(params).then(res => {
+      res.data.result.forEach(product => {
+        product.productDetails.forEach(options => {
+          options.variationOptions.forEach(option => {
+            if (option.variation.name === 'Color') {
+              this.colors.push(option.value)
+            } else if (option.variation.name === 'Size') {
+              this.sizes.push(option.value)
+            }
+          })
+        })
       })
     })
+    console.log(1, this.colors)
+    console.log(2, this.sizes)
   },
   methods: {
     addToCart(product, size, color, quantity) {

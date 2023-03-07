@@ -2,7 +2,7 @@
   <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
     <div class="card product-item border-0 mb-4">
       <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-        <img class="img-fluid w-100" src="@/assets/img/product-6.jpg" alt="">
+        <img class="img-fluid w-100" :src="imgProduct" alt="">
         <h6 class="text-truncate mb-3 d-flex justify-content-center">{{ product.name }}</h6>
         <div class="d-flex justify-content-center">
           <h6>{{ product.price2 | currency('VND', 0, 'đ', '.', ',') }}</h6>
@@ -59,7 +59,10 @@ export default {
     ...mapGetters([
       'avatar',
       'token'
-    ])
+    ]),
+    imgProduct() {
+      return require(`@/assets/img/${this.productCard.img}`)
+    }
   },
   methods: {
     chooseSize() {

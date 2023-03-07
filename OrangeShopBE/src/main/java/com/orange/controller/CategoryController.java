@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/test/category")
+@RequestMapping("/category")
 @RequiredArgsConstructor
 public class CategoryController {
 
