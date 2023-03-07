@@ -1,11 +1,13 @@
 package com.orange.domain.model.GHN;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
 @Data
+@Builder
 public class GHNItem {
 
     @NotNull

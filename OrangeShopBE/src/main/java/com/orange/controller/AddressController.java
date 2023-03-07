@@ -42,7 +42,7 @@ public class AddressController {
     public Result<?> getAddressByUser() {
         Optional<User> user = userRepository.findByUsername(getUsername());
         if (user.isEmpty()) {
-            GlobalException.throwException(EntityType.sysUser, ExceptionType.ENTITY_NOT_FOUND, "unauthenticated");
+            throw GlobalException.throwException(EntityType.sysUser, ExceptionType.ENTITY_NOT_FOUND, "unauthenticated");
         }
         List<AddressDTO> list = this.addressService.fillAddressByUser(user.get().getId());
         return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu adddress thành công!", list);
@@ -56,10 +56,10 @@ public class AddressController {
             if (user.isPresent()) {
                 result = addressService.addUserAddress(user.get(), addressDTO.get());
             } else {
-                GlobalException.throwException(EntityType.sysUser, ExceptionType.UNAUTHENTICATED, "unauthenticated");
+                throw GlobalException.throwException(EntityType.sysUser, ExceptionType.UNAUTHENTICATED, "unauthenticated");
             }
         } else {
-            GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_NOT_FOUND, "không có address!");
+            throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_NOT_FOUND, "không có address!");
         }
         return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu adddress thành công!", result);
     }
