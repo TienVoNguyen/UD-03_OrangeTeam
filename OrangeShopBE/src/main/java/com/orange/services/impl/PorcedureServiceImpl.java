@@ -1,9 +1,9 @@
-package com.orange.domain.mapper.impl;
+package com.orange.services.impl;
 
-import com.orange.domain.mapper.IStoreProcedure;
+import com.orange.services.IStoreProcedureService;
 import com.orange.domain.model.ModelProcedure.OgetCountAllStatus;
 import com.orange.domain.model.ModelProcedure.OgetTopProductByStt;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
@@ -13,13 +13,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Service
-public class StorePorcedureImpl implements IStoreProcedure{
+@RequiredArgsConstructor
+public class PorcedureServiceImpl implements IStoreProcedureService {
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public StorePorcedureImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public OgetCountAllStatus getCountAllStatus(String fromDate, String toDate) {

@@ -4,12 +4,11 @@ import com.orange.common.payload.Page;
 import com.orange.domain.dto.OrderViewDTO;
 import com.orange.domain.mapper.IOrderViewMapper;
 import com.orange.domain.model.*;
+import com.orange.domain.model.GHN.GHNItem;
 import com.orange.domain.model.GHN.GHNShippingOrder;
-import com.orange.exception.EntityNotFoundException;
+import com.orange.exception.*;
 import com.orange.domain.mapper.IOrderMapper;
 import com.orange.domain.dto.OrderDTO;
-import com.orange.exception.NotEnoughStockException;
-import com.orange.exception.OrderUpdateException;
 import com.orange.payload.request.UpdateOrderStatus;
 import com.orange.repositories.IOrderDetailRepository;
 import com.orange.repositories.IOrderRepository;
@@ -112,17 +111,17 @@ public class OrderServiceImpl implements IOrderService {
 
     private Order getOrderById(Long id) {
         return this.orderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy order!"));
+                .orElseThrow(() -> GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_NOT_FOUND, "Không tìm thấy Order!"));
     }
 
     @Transactional
     @Override
     public OrderDTO updateOrderStatus(UpdateOrderStatus orderStatus) {
         if (orderStatus.getOrderId() == null) {
-            throw new IllegalArgumentException("Không được để trống id");
+            throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_EXCEPTION, "Không được để trống id");
         }
         if (orderStatus.getOrderStatusId() == null) {
-            throw new IllegalArgumentException("Không được để trống trạng thái");
+            throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_EXCEPTION, "Không được để trống trạng thái");
         }
 
         try {
@@ -130,14 +129,33 @@ public class OrderServiceImpl implements IOrderService {
             order.setOrderStatus(new OrderStatus(orderStatus.getOrderStatusId()));
             if (orderStatus.getOrderStatusId() == EOrderStatus.CONFIRMED.getId()) {
                 GHNShippingOrder ghnShippingOrder = new GHNShippingOrder();
-                ghnShippingOrder.setToName(order.getConsigneeName());
-                ghnShippingOrder.setToPhone(order.getConsigneePhone());
+                List<GHNItem> items = order.getOrderDetails().stream()
+                                .map(od -> GHNItem.builder()
+                                        .name(od.getProductDetail().getProduct().getName())
+                                        .quantity(od.getQuantity())
+                                        .build()).collect(Collectors.toList());
+                ghnShippingOrder.setTo_name(order.getConsigneeName());
+                ghnShippingOrder.setTo_phone(order.getConsigneePhone());
+                ghnShippingOrder.setTo_address(order.getAddress().getAddressLine1());
+                ghnShippingOrder.setTo_ward_name(order.getAddress().getVillage().getName());
+                ghnShippingOrder.setTo_district_name(order.getAddress().getVillage().getDistrict().getName());
+                ghnShippingOrder.setTo_province_name(order.getAddress().getVillage().getDistrict().getCity().getName());
+                ghnShippingOrder.setWeight(200);
+                ghnShippingOrder.setLength(1);
+                ghnShippingOrder.setWidth(19);
+                ghnShippingOrder.setHeight(10);
+                ghnShippingOrder.setService_type_id(2);
+                ghnShippingOrder.setService_id(0);
+                ghnShippingOrder.setPayment_type_id(1);
+                ghnShippingOrder.setRequired_note("KHONGCHOXEMHANG");
+                ghnShippingOrder.setItems(items);
 
                 String shippingCode = this.shippingService.createShippingOrder(ghnShippingOrder).getOrderCode();
+                order.setShippingCode(shippingCode);
             }
             return orderMapper.toDto(this.orderRepository.save(order));
         } catch (DataAccessException e) {
-            throw new OrderUpdateException("Có lỗi xảy ra trong quá trình cập nhật trạng thái");
+            throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_NOT_FOUND, "Có lỗi xảy ra trong quá trình cập nhật trạng thái");
         }
     }
 }

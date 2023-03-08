@@ -56,10 +56,10 @@
         </form>
         <template v-if="token">
           <!-- Icon -->
-          <a class="text-reset me-3 ml-1" href="#">
+          <router-link class="text-reset me-3 ml-1" to="/user/shopping-cart">
             <i class="fas fa-shopping-cart" />
             <span class="badge rounded-pill badge-notification bg-danger">3</span>
-          </a>
+          </router-link>
           <!-- Notifications -->
           <div class="dropdown">
             <a
@@ -145,6 +145,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import avatar from 'element-ui/packages/avatar'
 
 export default {
   components: {
@@ -166,6 +167,9 @@ export default {
     }
   },
   created() {
+    if (!avatar) {
+      avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+    }
   },
   methods: {
     toggleSideBar() {
@@ -173,6 +177,10 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
+      const path = this.$route.fullPath
+      if (!path.startsWith('/home') && !path.startsWith('/product')) {
+        this.$router.push('/home')
+      }
     },
     login() {
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)

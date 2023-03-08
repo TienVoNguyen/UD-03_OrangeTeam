@@ -1,6 +1,7 @@
 package com.orange.domain.model.GHN;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -101,80 +102,80 @@ public class GHNShippingOrder {
 
     @NotNull
     @JsonProperty("payment_type_id")
-    private int paymentTypeId;
+    private int payment_type_id;
 
     @JsonProperty("note")
     private String note;
 
     @JsonProperty("from_name")
-    private String fromName;
+    private String from_name;
 
     @JsonProperty("from_phone")
-    private String fromPhone;
+    private String from_phone;
 
     @JsonProperty("from_address")
-    private String fromAddress;
+    private String from_address;
 
     @JsonProperty("from_ward_name")
-    private String fromWardName;
+    private String from_ward_name;
 
     @JsonProperty("from_district_name")
-    private String fromDistrictName;
+    private String from_district_name;
 
     @JsonProperty("from_province_name")
-    private String fromProvinceName;
+    private String from_province_name;
 
     @NotNull
     @JsonProperty("required_note")
-    private String requiredNote;
+    private String required_note;
 
     @JsonProperty("return_name")
-    private String returnName;
+    private String return_name;
 
     @JsonProperty("return_phone")
-    private String returnPhone;
+    private String return_phone;
 
     @JsonProperty("return_address")
-    private String returnAddress;
+    private String return_address;
 
     @JsonProperty("return_ward_name")
-    private String returnWardName;
+    private String return_ward_name;
 
     @JsonProperty("return_district_name")
-    private String returnDistrictName;
+    private String return_district_name;
 
     @JsonProperty("return_province_name")
-    private String returnProvinceName;
+    private String return_province_name;
 
     @JsonProperty("client_order_code")
-    private String clientOrderCode;
+    private String client_order_code;
 
     @NotNull
     @JsonProperty("to_name")
-    private String toName;
+    private String to_name;
 
     @NotNull
     @JsonProperty("to_phone")
-    private String toPhone;
+    private String to_phone;
 
     @NotNull
     @JsonProperty("to_address")
-    private String toAddress;
+    private String to_address;
 
     @NotNull
     @JsonProperty("to_ward_name")
-    private String toWardName;
+    private String to_ward_name;
 
     @NotNull
     @JsonProperty("to_district_name")
-    private String toDistrictName;
+    private String to_district_name;
 
     @NotNull
     @JsonProperty("to_province_name")
-    private String toProvinceName;
+    private String to_province_name;
 
     @JsonProperty("cod_amount")
-    private int codAmount;
+    private int cod_amount;
 
     @JsonProperty("content")
     private String content;
@@ -196,30 +197,30 @@ public class GHNShippingOrder {
     private int height;
 
     @JsonProperty("pick_station_id")
-    private int pickStationId;
+    private int pick_station_id;
 
     @JsonProperty("deliver_station_id")
-    private Integer deliverStationId;
+    private Integer deliver_station_id;
 
     @JsonProperty("insurance_value")
-    private int insuranceValue;
+    private int insurance_value;
 
     @NotNull
     @JsonProperty("service_id")
-    private int serviceId;
+    private int service_id;
 
     @NotNull
     @JsonProperty("service_type_id")
-    private int serviceTypeId;
+    private int service_type_id;
 
     @JsonProperty("coupon")
     private String coupon;
 
     @JsonProperty("pick_shift")
-    private String pickShift;
+    private String pick_shift;
 
     @JsonProperty("pickup_time")
-    private long pickupTime;
+    private long pickup_time;
 
     @NotNull
     @JsonProperty("items")

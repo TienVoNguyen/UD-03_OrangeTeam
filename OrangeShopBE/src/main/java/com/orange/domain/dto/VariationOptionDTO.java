@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 public class VariationOptionDTO extends BaseEntityDTO implements Serializable {
     @NotNull
-    private VariationDTO variation;
+    private Long variationId;
     @Size(max = 505)
     private String value;
 }
