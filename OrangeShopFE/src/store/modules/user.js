@@ -85,6 +85,7 @@ const actions = {
         resolve(data)
       }).catch(error => {
         reject(error)
+        this.$router.push('/login')
       })
     })
   },

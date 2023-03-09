@@ -10,7 +10,7 @@ import _ from 'lodash'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login', '/auth-redirect', '/home', '/product/view-detail'] // no redirect whitelist
+const whiteList = ['/login', '/auth-redirect', '/home', '/product'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -57,8 +57,7 @@ router.beforeEach(async(to, from, next) => {
     }
   } else {
     /* has no token*/
-
-    if (whiteList.indexOf(to.path) !== -1) {
+    if (whiteList.some((allowedRoute) => to.path.startsWith(allowedRoute))) {
       // in the free login whitelist, go directly
       next()
     } else {

@@ -1,12 +1,12 @@
 <template>
   <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
     <div class="card product-item border-0 mb-4 d-flex align-items-stretch">
-      <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0" style="max-height: 25em">
+      <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0" style="max-height: 26em">
         <img class="img-fluid w-100" :src="imgProduct" alt="">
       </div>
-      <div class="card-body border-left border-right text-center p-0 pt-4 pb-3" style="min-height: 14em">
-        <div class="d-flex justify-content-center">
-          <h6 class="text-truncate mb-3">{{ productCard.name }}</h6>
+      <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+        <div class="d-flex justify-content-center" style="min-height: 5em">
+          <router-link :to="'/product/view-detail/' + productCard.id"><h6 class="text-truncate mb-3">{{ productCard.name }}</h6></router-link>
         </div>
         <div class="d-flex justify-content-center mb-3">
           <h6>{{ productPriceSale | currency('VND', 0, 'đ', '.', ',') }}</h6><h6 class="text-muted ml-2"><del>{{ productPriceDefault | currency('VND', 0, 'đ', '.', ',') }}</del></h6>
@@ -72,7 +72,7 @@ export default {
       'token'
     ]),
     imgProduct() {
-      return require(`@/assets/pictures/${this.productCard.defaultImage}`)
+      return require(`@/assets/pictures/${this.productCard.defaultImage}.jpg`)
     },
     productPriceSale() {
       return this.productAddToCard.priceSale === 0 ? this.productCard.productDetails[0].priceSale : this.productAddToCard.priceSale
@@ -82,73 +82,11 @@ export default {
     }
   },
   watch: {
-    selectedSize: function(val) {
-      if (this.selectedColor) {
-        // Duyệt qua các phần tử trong mảng "productDetails"
-        for (let i = 0; i < this.productCard.productDetails.length; i++) {
-          const detail = this.productCard.productDetails[i]
-          let hasSizeM = false
-          let hasColorBlack = false
-
-          // Kiểm tra xem phần tử có tuỳ chọn size 'M' hay không
-          for (let j = 0; j < detail.variationOptions.length; j++) {
-            if (detail.variationOptions[j].value === this.selectedSize && detail.variationOptions[j].variation.name === this.sizes.name) {
-              hasSizeM = true
-              break
-            }
-          }
-
-          // Kiểm tra xem phần tử có tuỳ chọn color 'Black' hay không
-          for (let j = 0; j < detail.variationOptions.length; j++) {
-            if (detail.variationOptions[j].value === this.selectedColor && detail.variationOptions[j].variation.name === this.colors.name) {
-              hasColorBlack = true
-              break
-            }
-          }
-
-          // Nếu phần tử có cả hai tuỳ chọn này, lấy thông tin chi tiết của phần tử đó
-          if (hasSizeM && hasColorBlack) {
-            this.productAddToCard.priceSale = detail.priceSale
-            this.productAddToCard.priceDefault = detail.priceDefault
-            this.productAddToCard.id = detail.id
-            break
-          }
-        }
-      }
+    selectedSize: function() {
+      this.selectProductDetail()
     },
-    selectedColor: function(val) {
-      if (this.selectedSize) {
-        // Duyệt qua các phần tử trong mảng "productDetails"
-        for (let i = 0; i < this.productCard.productDetails.length; i++) {
-          const detail = this.productCard.productDetails[i]
-          let hasSizeM = false
-          let hasColorBlack = false
-
-          // Kiểm tra xem phần tử có tuỳ chọn size 'M' hay không
-          for (let j = 0; j < detail.variationOptions.length; j++) {
-            if (detail.variationOptions[j].value === this.selectedSize && detail.variationOptions[j].variation.name === this.sizes.name) {
-              hasSizeM = true
-              break
-            }
-          }
-
-          // Kiểm tra xem phần tử có tuỳ chọn color 'Black' hay không
-          for (let j = 0; j < detail.variationOptions.length; j++) {
-            if (detail.variationOptions[j].value === this.selectedColor && detail.variationOptions[j].variation.name === this.colors.name) {
-              hasColorBlack = true
-              break
-            }
-          }
-
-          // Nếu phần tử có cả hai tuỳ chọn này, lấy thông tin chi tiết của phần tử đó
-          if (hasSizeM && hasColorBlack) {
-            this.productAddToCard.priceSale = detail.priceSale
-            this.productAddToCard.priceDefault = detail.priceDefault
-            this.productAddToCard.id = detail.id
-            break
-          }
-        }
-      }
+    selectedColor: function() {
+      this.selectProductDetail()
     }
   },
   created() {
@@ -198,6 +136,40 @@ export default {
       this.sizes = this.variationOptions[0]
       this.colors = this.variationOptions[1]
       // console.log(this.variationOptions)
+    },
+    selectProductDetail() {
+      if (this.selectedSize && this.selectedColor) {
+        // Duyệt qua các phần tử trong mảng "productDetails"
+        for (let i = 0; i < this.productCard.productDetails.length; i++) {
+          const detail = this.productCard.productDetails[i]
+          let hasSizeM = false
+          let hasColorBlack = false
+
+          // Kiểm tra xem phần tử có tuỳ chọn size 'M' hay không
+          for (let j = 0; j < detail.variationOptions.length; j++) {
+            if (detail.variationOptions[j].value === this.selectedSize && detail.variationOptions[j].variation.name === this.sizes.name) {
+              hasSizeM = true
+              break
+            }
+          }
+
+          // Kiểm tra xem phần tử có tuỳ chọn color 'Black' hay không
+          for (let j = 0; j < detail.variationOptions.length; j++) {
+            if (detail.variationOptions[j].value === this.selectedColor && detail.variationOptions[j].variation.name === this.colors.name) {
+              hasColorBlack = true
+              break
+            }
+          }
+
+          // Nếu phần tử có cả hai tuỳ chọn này, lấy thông tin chi tiết của phần tử đó
+          if (hasSizeM && hasColorBlack) {
+            this.productAddToCard.priceSale = detail.priceSale
+            this.productAddToCard.priceDefault = detail.priceDefault
+            this.productAddToCard.id = detail.id
+            break
+          }
+        }
+      }
     }
   }
 }

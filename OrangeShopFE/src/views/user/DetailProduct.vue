@@ -24,7 +24,7 @@
         </div>
 
         <div class="col-lg-7 pb-5">
-          <h3 class="font-weight-semi-bold">{{ product.name }}</h3>
+          <h3 class="font-weight-semi-bold">{{ product11.name }}</h3>
           <div class="d-flex mb-3">
             <div class="text-primary mr-2">
               <small class="fas fa-star" />
@@ -198,6 +198,7 @@ import baseCommon from '@/utils/base-common'
 import horizontalScroll from 'el-table-horizontal-scroll'
 import userCommon from '@/views/user/Mixin/user-mixin'
 import PageHeader from '@/views/user/component/PageHeader'
+import { getProductDetail } from '@/api/product'
 
 export default {
   name: 'DetailProduct',
@@ -210,7 +211,8 @@ export default {
     return {
       size: '',
       color: '',
-      quantity: 1
+      quantity: 1,
+      product11: null
     }
   },
   watch: {
@@ -223,6 +225,9 @@ export default {
         this.quantity = 1
       }
     }
+  },
+  created() {
+    this.getProductDetail()
   },
   methods: {
     handleClick(tab, event) {
@@ -241,6 +246,13 @@ export default {
       } else {
         this.quantity++
       }
+    },
+    getProductDetail() {
+      getProductDetail(this.$route.params).then(res => {
+        console.log(res.data)
+        this.product11 = res.data
+        console.log(this.product11)
+      })
     }
   }
 }
