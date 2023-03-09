@@ -35,8 +35,8 @@
             </div>
             <small class="pt-1">(50 Reviews)</small>
           </div>
-          <h3 class="font-weight-semi-bold mb-4">{{ product.price2 | currency('VND', 0, 'đ', '.', ',') }}
-            <del class="text-muted"> {{ product.price1 | currency('VND', 0, 'đ', '.', ',') }}</del>
+          <h3 class="font-weight-semi-bold mb-4">{{ productPriceSale | currency('VND', 0, 'đ', '.', ',') }}
+            <del class="text-muted"> {{ productPriceDefault | currency('VND', 0, 'đ', '.', ',') }}</del>
           </h3>
           <p class="mb-4 text-justify">Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat diam stet sit clita ea.<br>
             Sanc invidunt ipsum et, labore clita lorem magna lorem ut. Erat lorem duo dolor no sea nonumy.
@@ -212,7 +212,27 @@ export default {
       size: '',
       color: '',
       quantity: 1,
-      product11: null
+      product11: null,
+      productAddToCard: {
+        id: '',
+        name: '',
+        priceSale: 0,
+        priceDefault: 0,
+        quantity: 1
+      },
+      selectedSize: '',
+      selectedColor: '',
+      sizes: [],
+      colors: [],
+      variationOptions: []
+    }
+  },
+  computed: {
+    productPriceSale() {
+      return this.productAddToCard.priceSale === 0 ? this.product11.productDetails[0].priceSale : this.productAddToCard.priceSale
+    },
+    productPriceDefault() {
+      return this.productAddToCard.priceDefault === 0 ? this.product11.productDetails[0].priceDefault : this.productAddToCard.priceDefault
     }
   },
   watch: {
@@ -224,6 +244,12 @@ export default {
       if (newVal <= 1) {
         this.quantity = 1
       }
+    },
+    selectedSize: function() {
+      this.selectProductDetail()
+    },
+    selectedColor: function() {
+      this.selectProductDetail()
     }
   },
   created() {
@@ -251,7 +277,9 @@ export default {
       getProductDetail(this.$route.params).then(res => {
         console.log(res.data)
         this.product11 = res.data
-        console.log(this.product11)
+        this.productAddToCard.name = this.product11.name
+        this.productAddToCard.priceSale = this.product11.productDetails[0].priceSale
+        this.productAddToCard.priceDefault = this.product11.productDetails[0].priceDefault
       })
     }
   }
