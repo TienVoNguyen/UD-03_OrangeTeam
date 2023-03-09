@@ -2,8 +2,11 @@ package com.orange.services.impl;
 
 import com.orange.domain.model.GHN.GHNProvince;
 import com.orange.domain.model.GHN.GHNShippingOrder;
+import com.orange.payload.request.GHN.GHNCalculateFeeRequest;
+import com.orange.payload.response.GHNCalculateFeeResponse;
+import com.orange.payload.response.GHNCalculateFeeResponseWrapper;
 import com.orange.payload.response.GHNProvinceResponse;
-import com.orange.payload.response.GHNShippingOrderResponse;
+import com.orange.payload.response.GHNShippingOrderResponseWrapper;
 import com.orange.services.IShippingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -45,7 +48,7 @@ public class ShippingService implements IShippingService {
     }
 
     @Override
-    public GHNShippingOrderResponse createShippingOrder(GHNShippingOrder ghnShippingOrder) {
+    public GHNShippingOrderResponseWrapper createShippingOrder(GHNShippingOrder ghnShippingOrder) {
         HttpHeaders headers = getHttpHeaders();
         headers.set("ShopId", "121789");
         HttpEntity<GHNShippingOrder> requestEntity = new HttpEntity<>(ghnShippingOrder, headers);
@@ -55,12 +58,39 @@ public class ShippingService implements IShippingService {
                                     "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create",
                                     HttpMethod.POST,
                                     requestEntity,
-                                    GHNShippingOrderResponse.class
+                                    GHNShippingOrderResponseWrapper.class
                             )
                     .getBody();
         } catch (RestClientException e) {
             e.printStackTrace();
             throw new RuntimeException("Có gì đó sai sai =)))");
+        } catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public GHNCalculateFeeResponse calculateFee(GHNCalculateFeeRequest calculateFeeRequest) {
+        HttpHeaders headers = getHttpHeaders();
+        headers.set("ShopId", "121789");
+        HttpEntity<GHNCalculateFeeRequest> requestEntity = new HttpEntity<>(calculateFeeRequest, headers);
+        try {
+            return restTemplate.exchange
+                            (
+                                    "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee",
+                                    HttpMethod.POST,
+                                    requestEntity,
+                                    GHNCalculateFeeResponseWrapper.class
+                            )
+                    .getBody()
+                    .getData();
+        } catch (RestClientException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Có gì đó sai sai =)))");
+        } catch (Exception e){
+            e.printStackTrace();
+            throw e;
         }
     }
 

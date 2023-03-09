@@ -51,6 +51,8 @@ public interface CacheService {
      */
     Object hmGet(String key, Object hashKey);
 
+    List<Object> hmGetValues(Object hashKey);
+
     /**
            * List added
      * @param k
@@ -106,4 +108,5 @@ public interface CacheService {
      */
     Set<Object> rangeByScore(String key, double score, double score1);
 
+    void hmDelete(String s, String valueOf);
 }

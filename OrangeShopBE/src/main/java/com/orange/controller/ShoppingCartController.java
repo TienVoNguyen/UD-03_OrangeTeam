@@ -1,50 +1,47 @@
 package com.orange.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.orange.Utils.JsonUtils;
+import com.orange.Utils.AccountUtils;
 import com.orange.common.payload.Result;
 import com.orange.domain.dto.CartDTO;
-import com.orange.redis.RedisCacheService;
-import com.orange.redis.RedisUtils;
-import com.orange.services.ICartService;
+import com.orange.services.impl.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/test/cart")
+@RequestMapping("/cart")
 @RequiredArgsConstructor
 public class ShoppingCartController {
-    private final RedisUtils redisUtils;
+    private final ShoppingCartService shoppingCartService;
 
-    @PostMapping()
+    @PostMapping("/add")
     public Result<?> add(@RequestBody CartDTO cartDTO) {
-        return Result.success("Thêm sản phẩm vào giỏ hàng thành công!", this.redisUtils.save(cartDTO));
+        return Result.success("Thêm sản phẩm vào giỏ hàng thành công!", this.shoppingCartService.add(cartDTO));
     }
-    @GetMapping("/{key}")
-    public Result<?> getAllProducts(@PathVariable String key) {
-        return Result.success("Xem sản phẩm trong giỏ hàng thành công!", this.redisUtils.getAll(key));
+    @PostMapping("/update")
+    public Result<?> update(@RequestParam Long id, @RequestParam Integer qty) {
+        return Result.success("Thêm sản phẩm vào giỏ hàng thành công!", this.shoppingCartService.update(id, qty));
+    }
+    @GetMapping("")
+    public Result<?> getCartItems() {
+        return Result.success("Xem sản phẩm trong giỏ hàng thành công!", this.shoppingCartService.getAll(AccountUtils.getUsername()));
     }
 
-    @GetMapping("/{key}/{id}")
-    public Result<?> getProductById(
-            @PathVariable String key,
-            @PathVariable int id
+    @GetMapping("/{id}")
+    public Result<?> getCartItemById(
+            @PathVariable Long id
     )  {
-        if (this.redisUtils.findProductById(key, id) != null) {
-            return Result.success("Xem chi tiết sản phẩm trong giỏ hàng thành công!", this.redisUtils.findProductById(key, id));
+        if (this.shoppingCartService.findCartItemById(id) != null) {
+            return Result.success("Xem chi tiết sản phẩm trong giỏ hàng thành công!", this.shoppingCartService.findCartItemById(id));
         }
             return Result.success("Sản phẩm trong giỏ hàng không tồn tại!",null);
     }
 
-    @DeleteMapping("/{key}/{id}")
-    public Result<?> deleteProductById(
-            @PathVariable String key,
-            @PathVariable int id
+    @DeleteMapping("/{id}")
+    public Result<?> deleteCartItemById(
+            @PathVariable Long id
     ) {
-        return Result.success("Xóa sản phẩm trong giỏ hàng thành công!", this.redisUtils.deleteCartProductbyId(key, id));
+        return Result.success("Xóa sản phẩm trong giỏ hàng thành công!", this.shoppingCartService.deleteCartItemById(id));
     }
 
 

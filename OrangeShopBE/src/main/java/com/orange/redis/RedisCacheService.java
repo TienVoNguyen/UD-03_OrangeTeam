@@ -145,9 +145,12 @@ public class RedisCacheService implements CacheService {
 	 */
 	@Override
 	public Object hmGet(String key, Object hashKey) {
-		key = getKey(key);
-		HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
-		return hash.get(key, hashKey);
+		return redisTemplate.opsForHash().get(key, hashKey);
+	}
+
+	@Override
+	public List<Object> hmGetValues(Object hashKey) {
+		return redisTemplate.opsForHash().values(hashKey);
 	}
 
 	/**
@@ -243,6 +246,11 @@ public class RedisCacheService implements CacheService {
 		key = getKey(key);
 		ZSetOperations<String, Object> zset = redisTemplate.opsForZSet();
 		return zset.rangeByScore(key, score, score1);
+	}
+
+	@Override
+	public void hmDelete(String s, String valueOf) {
+		redisTemplate.opsForHash().delete(s, valueOf);
 	}
 
 	private String getKey(String key) {

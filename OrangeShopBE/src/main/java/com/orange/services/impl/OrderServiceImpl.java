@@ -150,7 +150,7 @@ public class OrderServiceImpl implements IOrderService {
                 ghnShippingOrder.setRequired_note("KHONGCHOXEMHANG");
                 ghnShippingOrder.setItems(items);
 
-                String shippingCode = this.shippingService.createShippingOrder(ghnShippingOrder).getOrderCode();
+                String shippingCode = this.shippingService.createShippingOrder(ghnShippingOrder).getData().getOrder_code();
                 order.setShippingCode(shippingCode);
             }
             return orderMapper.toDto(this.orderRepository.save(order));
