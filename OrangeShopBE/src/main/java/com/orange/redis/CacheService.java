@@ -2,6 +2,7 @@ package com.orange.redis;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public interface CacheService {
 
@@ -42,6 +43,8 @@ public interface CacheService {
      * @param value
      */
     void hmSet(String key, Object hashKey, Object value);
+
+    void hmSetWithExpire(String hashKey, String key, Object value, long timeout, TimeUnit timeUnit);
 
     /**
            * Hash to get data

@@ -4,10 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.redis.core.RedisHash;
 
-import javax.persistence.Id;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @Builder
@@ -19,5 +16,5 @@ public class CartDTO implements Serializable {
     private String color;
     private String size;
     private Integer quantity;
-    private BigDecimal price;
+    private Double price;
 }
