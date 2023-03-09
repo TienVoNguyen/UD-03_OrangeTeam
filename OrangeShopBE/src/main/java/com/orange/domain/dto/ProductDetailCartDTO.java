@@ -11,7 +11,7 @@ import java.util.Set;
 @Data
 public class ProductDetailCartDTO extends BaseEntity implements Serializable {
 
-    private int productDTO;
+    private int productId;
     @Size(max = 1000)
     private String images;
     @NotNull

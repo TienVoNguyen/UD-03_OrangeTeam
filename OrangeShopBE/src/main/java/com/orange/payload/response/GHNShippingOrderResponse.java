@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class GHNShippingOrderResponse {
     @JsonProperty("order_code")
-    private String orderCode;
+    private String order_code;
 
     @JsonProperty("sort_code")
     private String sortCode;
@@ -28,5 +28,4 @@ public class GHNShippingOrderResponse {
 
     @JsonProperty("expected_delivery_time")
     private String expectedDeliveryTime;
-
 }

@@ -1,6 +1,7 @@
 package com.orange.controller;
 
 
+import com.orange.Utils.AccountUtils;
 import com.orange.common.payload.Result;
 import com.orange.payload.request.JwtRequest;
 import com.orange.payload.response.UserInfoRespone;
@@ -46,7 +47,7 @@ public class AccountController {
     }
     @GetMapping("/user/info")
     public Result<?>  getUserInfo() throws Exception {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String username = AccountUtils.getUsername();
         UserInfoRespone info = this.userService.getUserInfo(username);
         return Result.result(HttpStatus.OK.value(), "Lấy thông tin người dùng thành công", info);
     }
