@@ -1,5 +1,6 @@
 package com.orange.redis;
 
+import com.orange.exception.GlobalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
@@ -134,6 +135,25 @@ public class RedisCacheService implements CacheService {
 		key = getKey(key);
 		HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
 		hash.put(key, hashKey, value);
+	}
+
+	/**
+	 * hash add
+	 *
+	 * @param key
+	 * @param hashKey
+	 * @param value
+	 * @param timeout
+	 * @param timeUnit
+	 */
+	@Override
+	public void hmSetWithExpire(String hashKey, String key, Object value, long timeout, TimeUnit timeUnit) {
+		try {
+			hmSet(hashKey, key, value);
+			redisTemplate.expire(hashKey, timeout, timeUnit);
+		} catch (Exception e) {
+			throw GlobalException.throwException("fail to set hash");
+		}
 	}
 
 	/**
