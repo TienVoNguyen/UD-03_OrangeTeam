@@ -52,7 +52,12 @@ export default {
   data() {
     return {
       selectedSize: null,
-      selectedColor: null
+      selectedColor: null,
+      sizes: [],
+      colors: [],
+      variationOptions: [
+        { name: '', value: [] }
+      ]
     }
   },
   computed: {
@@ -61,8 +66,54 @@ export default {
       'token'
     ]),
     imgProduct() {
-      return require(`@/assets/img/${this.productCard.img}`)
+      return require(`@/assets/img/product-1.jpg`)
     }
+  },
+  created() {
+    // this.productCard.productDetails.forEach(options => {
+    //   console.log(options)
+    //   options.variationOptions.forEach(option => {
+    //     if (option.variation.name === 'Color') {
+    //       this.colors.push(option.value)
+    //     } else if (option.variation.name === 'Size') {
+    //       this.sizes.push(option.value)
+    //     }
+    //   })
+    // })
+    // let options = {};
+    //
+    // for (let i = 0; i < productDetails.length; i++) {
+    //   let variationOptions = productDetails[i].variationOptions;
+    //
+    //   for (let j = 0; j < variationOptions.length; j++) {
+    //     let variation = variationOptions[j].variation;
+    //     let value = variationOptions[j].value;
+    //
+    //     if (!options[variation.name]) {
+    //       options[variation.name] = [];
+    //     }
+    //
+    //     options[variation.name].push(value);
+    //   }
+    // }
+    //
+    // console.log(options);
+    const variations = this.productCard.productDetails.map(detail => {
+      return detail.variationOptions.reduce((result, option) => {
+        const variation = option.variation.name
+        const value = option.value
+
+        if (!result.hasOwnProperty(variation)) {
+          result[variation] = []
+        }
+
+        result[variation].push(value)
+
+        return result
+      }, {})
+    })
+
+    console.log(variations)
   },
   methods: {
     chooseSize() {
