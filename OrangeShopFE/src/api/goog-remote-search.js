@@ -24,7 +24,6 @@ export function getCities() {
 }
 
 export function getDistricts(province_id) {
-  console.log(province_id)
   return request({
     url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district',
     method: 'get',

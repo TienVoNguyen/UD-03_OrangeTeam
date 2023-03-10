@@ -76,7 +76,6 @@ const actions = {
         } else {
           commit('SET_AVATAR', avatar)
         }
-        console.log(roles)
         commit('SET_ROLES', roles)
         commit('SET_USERNAME', username)
         commit('SET_PHONE', phone)
@@ -86,6 +85,7 @@ const actions = {
         resolve(data)
       }).catch(error => {
         reject(error)
+        this.$router.push('/login')
       })
     })
   },

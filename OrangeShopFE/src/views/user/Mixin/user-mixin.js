@@ -1,5 +1,5 @@
 import { mapGetters } from 'vuex'
-import { getCities } from '@/api/goog-remote-search'
+import { getListProduct } from '@/api/product'
 export default {
   data() {
     return {
@@ -53,159 +53,9 @@ export default {
           quantity: 23
         }
       ],
-      productDetail: [
-        {
-          id: 1,
-          name: 'Colorful Stylish Shirt',
-          sizes: [
-            { id: 1, name: 'XS' },
-            { id: 2, name: 'S' },
-            { id: 3, name: 'M' },
-            { id: 4, name: 'L' },
-            { id: 5, name: 'XL' }
-          ],
-          colors: [
-            { id: 1, name: 'Black' },
-            { id: 2, name: 'Blue' },
-            { id: 3, name: 'Yellow' },
-            { id: 4, name: 'Sky' },
-            { id: 5, name: 'Green' }
-          ],
-          price1: '232312',
-          price2: '203233'
-        },
-        {
-          id: 2,
-          name: 'Colorful Stylish Shirt',
-          sizes: [
-            { id: 5, name: 'XL' }
-          ],
-          colors: [
-            { id: 1, name: 'Black' },
-            { id: 2, name: 'Blue' },
-            { id: 4, name: 'Sky' },
-            { id: 5, name: 'Green' }
-          ],
-          price1: '232312',
-          price2: '203233'
-        },
-        {
-          id: 3,
-          name: 'Colorful Stylish Shirt 3',
-          sizes: [
-            { id: 1, name: 'XS' },
-            { id: 2, name: 'S' },
-            { id: 3, name: 'M' },
-            { id: 4, name: 'L' },
-            { id: 5, name: 'XL' }
-          ],
-          colors: [
-            { id: 4, name: 'Sky' },
-            { id: 5, name: 'Green' }
-          ],
-          price1: '232312',
-          price2: '203233'
-        },
-        {
-          id: 4,
-          name: 'Colorful Stylish Shirt 4',
-          sizes: [
-            { id: 1, name: 'XS' },
-            { id: 2, name: 'S' }
-          ],
-          colors: [
-            { id: 1, name: 'Black' },
-            { id: 2, name: 'Blue' },
-            { id: 3, name: 'Yellow' },
-            { id: 4, name: 'Sky' },
-            { id: 5, name: 'Green' }
-          ],
-          price1: '232312',
-          price2: '203233'
-        },
-        {
-          id: 5,
-          name: 'Colorful Stylish Shirt 5',
-          sizes: [
-            { id: 1, name: 'XS' },
-            { id: 2, name: 'S' },
-            { id: 5, name: 'XL' }
-          ],
-          colors: [
-            { id: 4, name: 'Sky' },
-            { id: 5, name: 'Green' }
-          ],
-          price1: '232312',
-          price2: '203233'
-        },
-        {
-          id: 6,
-          name: 'Colorful Stylish Shirt 6',
-          sizes: [
-            { id: 1, name: 'XS' },
-            { id: 2, name: 'S' },
-            { id: 4, name: 'L' },
-            { id: 5, name: 'XL' }
-          ],
-          colors: [
-            { id: 1, name: 'Black' },
-            { id: 2, name: 'Blue' },
-            { id: 3, name: 'Yellow' },
-            { id: 4, name: 'Sky' }
-          ],
-          price1: '232312',
-          price2: '203233'
-        },
-        {
-          id: 7,
-          name: 'Colorful Stylish Shirt 7',
-          sizes: [
-            { id: 1, name: 'XS' },
-            { id: 2, name: 'S' },
-            { id: 3, name: 'M' },
-            { id: 5, name: 'XL' }
-          ],
-          colors: [
-            { id: 1, name: 'Black' },
-            { id: 5, name: 'Green' }
-          ],
-          price1: '232312',
-          price2: '203233'
-        },
-        {
-          id: 8,
-          name: 'Colorful Stylish Shirt 8',
-          sizes: [
-            { id: 1, name: 'XS' },
-            { id: 4, name: 'L' },
-            { id: 5, name: 'XL' }
-          ],
-          colors: [
-            { id: 1, name: 'Black' },
-            { id: 2, name: 'Blue' },
-            { id: 3, name: 'Yellow' }
-          ],
-          price1: '232312',
-          price2: '203233'
-        }
-      ],
-      sizes: [
-        { id: 1, name: 'XS' },
-        { id: 2, name: 'S' },
-        { id: 3, name: 'M' },
-        { id: 4, name: 'L' },
-        { id: 5, name: 'XL' }
-      ],
-      colors: [
-        { id: 1, name: 'Black' },
-        { id: 2, name: 'Blue' },
-        { id: 3, name: 'Yellow' },
-        { id: 4, name: 'Sky' },
-        { id: 5, name: 'Green' }
-      ],
+      productDetail: [],
       price1: '232312',
-      price2: '203233',
-      citis: []
+      price2: '203233'
     }
   },
   computed: {
@@ -223,13 +73,12 @@ export default {
     }
   },
   created() {
-    getCities().then(res => {
-      this.citis = res.data.data.map(city => {
-        return {
-          id: city.ProvinceID,
-          name: city.ProvinceName
-        }
-      })
+    const params = {
+      page: 1,
+      size: 8
+    }
+    getListProduct(params).then(res => {
+      this.productDetail = res.data.result
     })
   },
   methods: {

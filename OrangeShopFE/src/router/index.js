@@ -126,12 +126,12 @@ export const constantRoutes = [
   {
     path: '/product',
     component: UserLayout,
-    redirect: '/product/view-detail',
+    // redirect: '/product/view-detail',
     name: 'Product',
     meta: { title: 'Product', noCache: true },
     children: [
       {
-        path: 'view-detail',
+        path: 'view-detail/:id',
         component: () => import('@/views/user/DetailProduct.vue'),
         name: 'Detail',
         meta: { title: 'Detail', noCache: true }
