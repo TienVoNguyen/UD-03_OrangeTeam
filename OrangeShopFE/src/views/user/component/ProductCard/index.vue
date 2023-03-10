@@ -12,12 +12,12 @@
           <h6>{{ productPriceSale | currency('VND', 0, 'đ', '.', ',') }}</h6><h6 class="text-muted ml-2"><del>{{ productPriceDefault | currency('VND', 0, 'đ', '.', ',') }}</del></h6>
         </div>
         <div class="d-flex justify-content-center mb-2">
-          <el-radio-group v-model="selectedSize" size="mini" fill="#D19C97" @change="chooseSize">
+          <el-radio-group v-model="selectedSize" size="mini" fill="#D19C97">
             <el-radio-button v-for="(s) in sizes.value" :key="s" :label="s" />
           </el-radio-group>
         </div>
         <div class="d-flex justify-content-center align-items-end w-100">
-          <el-radio-group v-model="selectedColor" size="mini" fill="#D19C97" @change="chooseColor">
+          <el-radio-group v-model="selectedColor" size="mini" fill="#D19C97">
             <el-radio-button v-for="(c) in colors.value" :key="c" :label="c" />
           </el-radio-group>
         </div>
@@ -72,7 +72,7 @@ export default {
       'token'
     ]),
     imgProduct() {
-      return require(`@/assets/pictures/${this.productCard.defaultImage}.jpg`)
+      return require(`@/assets/pictures/${this.productCard.defaultImage}`)
     },
     productPriceSale() {
       return this.productAddToCard.priceSale === 0 ? this.productCard.productDetails[0].priceSale : this.productAddToCard.priceSale
@@ -99,12 +99,6 @@ export default {
     console.log(2, this.productCard.productDetails[0])
   },
   methods: {
-    chooseSize() {
-      // console.log(this.selectedSize)
-    },
-    chooseColor() {
-      // console.log(this.selectedColor)
-    },
     viewDetail(data) {
       this.$router.push(`/product`)
     },

@@ -24,7 +24,7 @@
         </div>
 
         <div class="col-lg-7 pb-5">
-          <h3 class="font-weight-semi-bold">{{ product11.name }}</h3>
+          <h3 class="font-weight-semi-bold">{{ productAddToCard.name }}</h3>
           <div class="d-flex mb-3">
             <div class="text-primary mr-2">
               <small class="fas fa-star" />
@@ -42,15 +42,15 @@
             Sanc invidunt ipsum et, labore clita lorem magna lorem ut. Erat lorem duo dolor no sea nonumy.
             Accus labore stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum diam et rebum kasd rebum.</p>
           <div class="d-flex mb-3">
-            <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
-            <el-radio-group v-model="size" style="padding-top: .4rem">
-              <el-radio v-for="(s, index) in product.sizes" :key="index" :label="s.id" class="mb-0 font-weight-bold">{{ s.name }}</el-radio>
+            <p class="text-dark font-weight-medium mb-0 mr-3">{{ sizes.name }}:</p>
+            <el-radio-group v-model="selectedSize" style="padding-top: .4rem">
+              <el-radio v-for="(s, index) in sizes.value" :key="index" :label="s" class="mb-0 font-weight-bold" />
             </el-radio-group>
           </div>
           <div class="d-flex mb-4">
-            <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
-            <el-radio-group v-model="color" style="padding-top: .4rem">
-              <el-radio v-for="(c, index) in product.colors" :key="index" :label="c.id" class="mb-0 font-weight-bold">{{ c.name }}</el-radio>
+            <p class="text-dark font-weight-medium mb-0 mr-3">{{ colors.name }}:</p>
+            <el-radio-group v-model="selectedColor" style="padding-top: .4rem">
+              <el-radio v-for="(c, index) in colors.value" :key="index" :label="c" class="mb-0 font-weight-bold" />
             </el-radio-group>
           </div>
           <div class="d-flex align-items-center mb-4 pt-2">
@@ -67,7 +67,7 @@
                 </button>
               </div>
             </div>
-            <button class="btn btn-primary px-3" @click="addToCart(product, size, color, quantity)"><i class="fa fa-shopping-cart mr-1" /> Add To Cart</button>
+            <button class="btn btn-primary px-3" @click="addToCart(productAddToCard, selectedSize, selectedColor, quantity)"><i class="fa fa-shopping-cart mr-1" /> Add To Cart</button>
           </div>
           <div class="d-flex pt-2">
             <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
@@ -209,10 +209,8 @@ export default {
   mixins: [baseCommon, userCommon, BaseValidate],
   data() {
     return {
-      size: '',
-      color: '',
       quantity: 1,
-      product11: null,
+      product11: [],
       productAddToCard: {
         id: '',
         name: '',
@@ -229,10 +227,10 @@ export default {
   },
   computed: {
     productPriceSale() {
-      return this.productAddToCard.priceSale === 0 ? this.product11.productDetails[0].priceSale : this.productAddToCard.priceSale
+      return this.productAddToCard.priceSale // === 0 ? this.product11.productDetails[0].priceSale : this.productAddToCard.priceSale
     },
     productPriceDefault() {
-      return this.productAddToCard.priceDefault === 0 ? this.product11.productDetails[0].priceDefault : this.productAddToCard.priceDefault
+      return this.productAddToCard.priceDefault // === 0 ? this.product11.productDetails[0].priceDefault : this.productAddToCard.priceDefault
     }
   },
   watch: {
@@ -280,7 +278,72 @@ export default {
         this.productAddToCard.name = this.product11.name
         this.productAddToCard.priceSale = this.product11.productDetails[0].priceSale
         this.productAddToCard.priceDefault = this.product11.productDetails[0].priceDefault
+        this.getProductVariations()
       })
+    },
+    getProductVariations() {
+      const options = {}
+      let productVariations = []
+      for (let i = 0; i < this.product11.productDetails.length; i++) {
+        const variationOptions = this.product11.productDetails[i].variationOptions
+
+        for (let j = 0; j < variationOptions.length; j++) {
+          const variation = variationOptions[j].variation
+          const value = variationOptions[j].value
+          if (!options[variation.name]) {
+            options[variation.name] = []
+          }
+          options[variation.name].push(value)
+        }
+      }
+      productVariations = options
+
+      for (const property in productVariations) {
+        const obj = {}
+        obj.name = property
+        obj.value = productVariations[property].filter((item, index) => {
+          return productVariations[property].indexOf(item) === index
+        })
+        this.variationOptions.push(obj)
+      }
+      this.sizes = this.variationOptions[0]
+      this.colors = this.variationOptions[1]
+      // console.log(this.variationOptions)
+    },
+    selectProductDetail() {
+      if (this.selectedSize && this.selectedColor) {
+        // Duyệt qua các phần tử trong mảng "productDetails"
+        for (let i = 0; i < this.product11.productDetails.length; i++) {
+          const detail = this.product11.productDetails[i]
+          let hasSizeM = false
+          let hasColorBlack = false
+
+          // Kiểm tra xem phần tử có tuỳ chọn size 'M' hay không
+          for (let j = 0; j < detail.variationOptions.length; j++) {
+            if (detail.variationOptions[j].value === this.selectedSize && detail.variationOptions[j].variation.name === this.sizes.name) {
+              hasSizeM = true
+              break
+            }
+          }
+
+          // Kiểm tra xem phần tử có tuỳ chọn color 'Black' hay không
+          for (let j = 0; j < detail.variationOptions.length; j++) {
+            if (detail.variationOptions[j].value === this.selectedColor && detail.variationOptions[j].variation.name === this.colors.name) {
+              hasColorBlack = true
+              break
+            }
+          }
+
+          // Nếu phần tử có cả hai tuỳ chọn này, lấy thông tin chi tiết của phần tử đó
+          if (hasSizeM && hasColorBlack) {
+            this.productAddToCard.priceSale = detail.priceSale
+            this.productAddToCard.priceDefault = detail.priceDefault
+            this.productAddToCard.id = detail.id
+            console.log(detail.id)
+            break
+          }
+        }
+      }
     }
   }
 }
