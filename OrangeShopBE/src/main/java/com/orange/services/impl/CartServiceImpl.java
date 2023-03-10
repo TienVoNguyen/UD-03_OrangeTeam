@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
+@Deprecated
 public class CartServiceImpl implements ICartService{
     private RedisTemplate redisTemplate;
     private final RedisQueue<CartDTO> redisQueue = new RedisQueue<>(redisTemplate, "shopping_cart", CartDTO.class);
