@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
-@RequestMapping("test/product")
+@RequestMapping("/product")
 public class ProductController {
     private final IProductService productService;
     public ProductController(IProductService productService) {

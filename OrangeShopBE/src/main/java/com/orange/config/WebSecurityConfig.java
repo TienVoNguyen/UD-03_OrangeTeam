@@ -86,6 +86,8 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/auth/**").permitAll()
                 .antMatchers("/test/**").permitAll()
+                .antMatchers("/product/**").permitAll()
+                .antMatchers("/category/**").permitAll()
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/files/**").permitAll()
                 .anyRequest().authenticated();

@@ -273,7 +273,7 @@ import horizontalScroll from 'el-table-horizontal-scroll'
 import userCommon from '@/views/user/Mixin/user-mixin'
 import PageHeader from '@/views/user/component/PageHeader'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { searchAddress, getDistricts, getVillages } from '@/api/goog-remote-search'
+import { searchAddress, getDistricts, getVillages, getCities } from '@/api/goog-remote-search'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 
 export default {
@@ -321,7 +321,8 @@ export default {
         date: '2016-05-03',
         name: 'John Smith',
         address: 'No.1518,  Jinshajiang Road, Putuo District'
-      }]
+      }],
+      cities: []
     }
   },
   watch: {
@@ -377,15 +378,21 @@ export default {
     remoteCity(queryString) {
       if (queryString !== '') {
         this.loading = true
-        setTimeout(() => {
+        getCities().then(res => {
+          this.cities = res.data.data.map(city => {
+            return {
+              id: city.ProvinceID,
+              name: city.ProvinceName
+            }
+          })
           this.loading = false
-          this.listAddress = this.citis.filter(item => {
+          this.listAddress = this.cities.filter(item => {
             const searchNormalized = queryString.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
               .toLowerCase().replace(/[^a-z0-9]/g, '')
             return item.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
               .toLowerCase().replace(/[^a-z0-9]/g, '').indexOf(searchNormalized) !== -1
           })
-        }, 200)
+        })
       } else {
         this.listAddress = []
       }
@@ -396,7 +403,6 @@ export default {
         getDistricts(this.addressForm.city.id).then(res => {
           this.loading = false
           const districts = res.data.data
-          console.log(districts)
           this.listDistrict = districts.filter(item => {
             const searchNormalized = queryString.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
               .toLowerCase().replace(/[^a-z0-9]/g, '')
