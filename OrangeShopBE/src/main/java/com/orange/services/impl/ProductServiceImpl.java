@@ -1,7 +1,6 @@
 package com.orange.services.impl;
 
 import com.orange.domain.dto.ProductDTO;
-import com.orange.domain.dto.ProductDetailDTO;
 import com.orange.domain.mapper.IProductDetailMapper;
 import com.orange.domain.mapper.IProductMapper;
 import com.orange.domain.model.Product;
@@ -12,7 +11,6 @@ import com.orange.repositories.IProductRepository;
 import com.orange.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +47,16 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public com.orange.common.payload.Page<?> fillAll(Pageable pageable) {
-        Page<Product> result = this.productRepository.findAll(pageable);
+        Page<Product> result = this.productRepository.findAllByStatusIsTrue(pageable);
+        return getPage(result);
+    }
+    @Override
+    public com.orange.common.payload.Page<?> findProductsByCategory(Pageable pageable, Long cid) {
+        Page<Product> result = this.productRepository.findByCategoryIdAndStatusIsTrue(cid, pageable);
+        return getPage(result);
+    }
+
+    private com.orange.common.payload.Page<?> getPage(Page<Product> result) {
         int totalPages = result.getTotalPages();
         List<Product> productList = result.toList();
         List<ProductDTO> DTOList = productMapper.toDtoList(productList);

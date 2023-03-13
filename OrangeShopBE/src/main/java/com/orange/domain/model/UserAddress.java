@@ -24,4 +24,7 @@ public class UserAddress extends BaseEntity{
     @Column(name = "is_default")
     private Byte isDefault;
 
+    @Column(name = "status")
+    private Boolean status;
+
 }

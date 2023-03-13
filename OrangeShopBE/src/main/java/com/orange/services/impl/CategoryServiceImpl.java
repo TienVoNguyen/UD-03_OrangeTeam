@@ -40,10 +40,16 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public Page<?> fillAll(Pageable pageable) {
-        org.springframework.data.domain.Page<Category> result = this.categoryRepository.findAll(pageable);
+        org.springframework.data.domain.Page<Category> result = this.categoryRepository.findAllByStatusIsTrue(pageable);
         List<CategoryResponse> categoryResponses = result.getContent()
                 .stream()
-                .map(c -> this.mapper.map(c, CategoryResponse.class))
+                .map(c -> {
+                    CategoryResponse cr = this.mapper.map(c, CategoryResponse.class);
+                    if (c.getParentCategory() != null){
+                        cr.setParentCategoryId(c.getParentCategory().getId());
+                    }
+                    return cr;
+                })
                 .collect(Collectors.toList());
         return Page.of(result.getSize(), result.getNumber(),result.getTotalPages(), Math.toIntExact(result.getTotalElements()), categoryResponses);
     }
