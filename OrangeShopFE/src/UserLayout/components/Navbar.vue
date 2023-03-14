@@ -58,7 +58,7 @@
           <!-- Icon -->
           <router-link class="text-reset me-3 ml-1" to="/user/shopping-cart">
             <i class="fas fa-shopping-cart" />
-            <span class="badge rounded-pill badge-notification bg-danger">3</span>
+            <span class="badge rounded-pill badge-notification bg-danger">{{ getCount }}</span>
           </router-link>
           <!-- Notifications -->
           <div class="dropdown">
@@ -151,6 +151,7 @@ export default {
   },
   data() {
     return {
+      items: []
     }
   },
   computed: {
@@ -159,10 +160,17 @@ export default {
       'avatar',
       'device',
       'roles',
-      'token'
+      'token',
+      'cart'
     ]),
     dashboardVisible() {
       return !this.roles.length < 1 && !this.roles.includes('user')
+    },
+    getCount() {
+      // console.log(this.cart)
+      return this.cart.map(item => item.quantity)
+        // eslint-disable-next-line no-return-assign
+        .reduce((total, quantity) => total += quantity, 0)
     }
   },
   methods: {

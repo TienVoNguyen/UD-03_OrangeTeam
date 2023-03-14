@@ -212,10 +212,13 @@ export default {
       quantity: 1,
       product11: [],
       productAddToCard: {
-        id: '',
-        name: '',
-        priceSale: 0,
+        productDetailId: '',
+        productName: '',
+        image: '',
+        color: '',
+        size: '',
         priceDefault: 0,
+        price: 0,
         quantity: 1
       },
       selectedSize: '',
@@ -227,7 +230,7 @@ export default {
   },
   computed: {
     productPriceSale() {
-      return this.productAddToCard.priceSale // === 0 ? this.product11.productDetails[0].priceSale : this.productAddToCard.priceSale
+      return this.productAddToCard.price// === 0 ? this.product11.productDetails[0].priceSale : this.productAddToCard.priceSale
     },
     productPriceDefault() {
       return this.productAddToCard.priceDefault // === 0 ? this.product11.productDetails[0].priceDefault : this.productAddToCard.priceDefault
@@ -273,11 +276,12 @@ export default {
     },
     getProductDetail() {
       getProductDetail(this.$route.params).then(res => {
-        console.log(res.data)
         this.product11 = res.data
-        this.productAddToCard.name = this.product11.name
-        this.productAddToCard.priceSale = this.product11.productDetails[0].priceSale
+        console.log(res.data)
+        this.productAddToCard.productName = this.product11.name
+        this.productAddToCard.price = this.product11.productDetails[0].priceSale
         this.productAddToCard.priceDefault = this.product11.productDetails[0].priceDefault
+        this.productAddToCard.image = this.product11.productDetails[0].images
         this.getProductVariations()
       })
     },
@@ -336,10 +340,12 @@ export default {
 
           // Nếu phần tử có cả hai tuỳ chọn này, lấy thông tin chi tiết của phần tử đó
           if (hasSizeM && hasColorBlack) {
-            this.productAddToCard.priceSale = detail.priceSale
+            this.productAddToCard.price = detail.priceSale
             this.productAddToCard.priceDefault = detail.priceDefault
-            this.productAddToCard.id = detail.id
-            console.log(detail.id)
+            this.productAddToCard.productDetailId = detail.id
+            this.productAddToCard.image = detail.images
+            this.productAddToCard.color = this.selectedColor
+            this.productAddToCard.size = this.selectedSize
             break
           }
         }

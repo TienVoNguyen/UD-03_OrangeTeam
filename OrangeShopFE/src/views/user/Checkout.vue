@@ -76,12 +76,12 @@
             </div>
             <div class="card-body">
               <h5 class="font-weight-medium mb-3">Products</h5>
-              <div v-for="(p, index) in productCart" :key="index" class="d-flex justify-content-between">
-                <p>{{ p.name }}</p>
-                <p>{{ p.size.name }}</p>
-                <p>{{ p.color.name }}</p>
+              <div v-for="(p, index) in cart" :key="index" class="d-flex justify-content-between">
+                <p class="w-50">{{ p.productName }}</p>
+                <p>{{ p.size }}</p>
+                <p>{{ p.color }}</p>
                 <p>{{ p.quantity }}</p>
-                <p>{{ p.price2 * p.quantity | currency('VND', 0, 'đ', '.', ',') }}</p>
+                <p>{{ p.price * p.quantity | currency('VND', 0, 'đ', '.', ',') }}</p>
               </div>
               <hr class="mt-0">
               <div class="d-flex justify-content-between mb-3 pt-1">
@@ -167,25 +167,26 @@
                     </el-form-item>
                   </ValidationProvider>
                 </div>
+
                 <div class="col-md-4">
                   <ValidationProvider v-slot="{ errors }" rules="requiredSelect">
-                    <el-form-item :error="messageError('Phường/xã', errors[0])">
-                      <template v-slot:label><label><span class="svg-container">Phường/xã<span
+                    <el-form-item :error="messageError('Thành phố', errors[0])">
+                      <template v-slot:label><label><span class="svg-container">Thành phố<span
                         class="text-danger"
                       > *</span></span></label></template>
                       <el-select
-                        v-model="addressForm.village"
+                        v-model="addressForm.city"
                         class="w-100"
-                        placeholder="Chọn phường/xã"
+                        placeholder="Chọn thành phố"
                         value-key="id"
                         filterable
                         remote
                         reserve-keyword
-                        :remote-method="remoteVillage"
+                        :remote-method="remoteCity"
                         :loading="loading"
                       >
                         <el-option
-                          v-for="(item, index) in listVillage"
+                          v-for="(item, index) in listAddress"
                           :key="index"
                           :label="item.name"
                           :value="item"
@@ -194,7 +195,7 @@
                     </el-form-item>
                   </ValidationProvider>
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-4">
                   <ValidationProvider v-slot="{ errors }" rules="requiredSelect">
                     <el-form-item :error="messageError('Quận/Huyện', errors[0])">
                       <template v-slot:label><label><span class="svg-container">Quận/Huyện<span
@@ -221,25 +222,25 @@
                     </el-form-item>
                   </ValidationProvider>
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-4">
                   <ValidationProvider v-slot="{ errors }" rules="requiredSelect">
-                    <el-form-item :error="messageError('Thành phố', errors[0])">
-                      <template v-slot:label><label><span class="svg-container">Thành phố<span
+                    <el-form-item :error="messageError('Phường/xã', errors[0])">
+                      <template v-slot:label><label><span class="svg-container">Phường/xã<span
                         class="text-danger"
                       > *</span></span></label></template>
                       <el-select
-                        v-model="addressForm.city"
+                        v-model="addressForm.village"
                         class="w-100"
-                        placeholder="Chọn thành phố"
+                        placeholder="Chọn phường/xã"
                         value-key="id"
                         filterable
                         remote
                         reserve-keyword
-                        :remote-method="remoteCity"
+                        :remote-method="remoteVillage"
                         :loading="loading"
                       >
                         <el-option
-                          v-for="(item, index) in listAddress"
+                          v-for="(item, index) in listVillage"
                           :key="index"
                           :label="item.name"
                           :value="item"
@@ -275,6 +276,7 @@ import PageHeader from '@/views/user/component/PageHeader'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { searchAddress, getDistricts, getVillages, getCities } from '@/api/goog-remote-search'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DetailProduct',
@@ -325,6 +327,11 @@ export default {
       cities: []
     }
   },
+  computed: {
+    ...mapGetters([
+      'cart'
+    ])
+  },
   watch: {
     quantity: function(newVal, oldVal) {
       this.quantity = String(this.quantity).replace(/\D/g, '')
@@ -335,8 +342,6 @@ export default {
         this.quantity = 1
       }
     }
-  },
-  created() {
   },
   methods: {
     submitForm() {

@@ -1,5 +1,6 @@
 import { mapGetters } from 'vuex'
 import { getListProduct } from '@/api/product'
+import { addCart } from '@/api/cart'
 export default {
   data() {
     return {
@@ -60,16 +61,13 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'sidebar',
-      'avatar',
-      'device',
-      'roles',
-      'token'
+      'token',
+      'cart'
     ]),
     subTotal() {
-      return this.productCart
+      return this.cart
         // eslint-disable-next-line no-return-assign
-        .map(item => item.quantity * item.price2).reduce((total, qty) => total += qty, 0)
+        .map(item => item.quantity * item.price).reduce((total, qty) => total += qty, 0)
     }
   },
   created() {
@@ -89,8 +87,13 @@ export default {
         if (size && color) {
           if (!quantity) {
             quantity = 1
+          } else {
+            product.quantity = quantity
           }
-          console.log(product, size, color, quantity)
+          console.log(product)
+          addCart(product).then(() => {
+            this.$store.dispatch('cart/getCart').then(() => this.notifySuccess('Thành công', 'Thêm sản phẩm vào giỏ hàng thành công!'))
+          })
         } else {
           this.notifyWarning('Cảnh báo', 'Hãy chọn Size và Color trước khi thêm vào giỏ hàng!')
         }
