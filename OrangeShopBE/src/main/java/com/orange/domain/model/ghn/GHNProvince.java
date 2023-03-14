@@ -1,11 +1,8 @@
-package com.orange.domain.model.GHN;
+package com.orange.domain.model.ghn;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.Instant;
 
 @Getter
 @Setter

@@ -1,5 +1,6 @@
 package com.orange.security.jwt;
 
+import com.orange.exception.GlobalException;
 import com.orange.security.services.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
+            throw GlobalException.throwException(e.getMessage());
         }
 
         filterChain.doFilter(request, response);

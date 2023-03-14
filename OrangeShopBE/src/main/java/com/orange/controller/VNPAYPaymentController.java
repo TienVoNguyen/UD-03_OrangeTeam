@@ -1,10 +1,8 @@
 package com.orange.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.orange.Utils.VNPAY.VNPAYUtils;
+import com.orange.Utils.vnpay.VNPAYUtils;
 import com.orange.common.payload.Result;
-import com.orange.domain.model.VNPAY.VNPAY;
+import com.orange.domain.model.vnpay.VNPAY;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +29,7 @@ public class VNPAYPaymentController {
         vnp_Params.put(VNPAY.VNPAY_TMN_CODE.getKey(), VNPAY.VNPAY_TMN_CODE.getValue());
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
+//        vnp_Params.put("vnp_BankCode", null);
         /*String bank_code = req.getParameter("bankcode");
         if (bank_code != null && !bank_code.isEmpty()) {
             vnp_Params.put("vnp_BankCode", bank_code);
@@ -47,7 +46,7 @@ public class VNPAYPaymentController {
             vnp_Params.put("vnp_Locale", "vn");
         }*/
         vnp_Params.put(VNPAY.VNPAY_RETURN_URL.getKey(), VNPAY.VNPAY_RETURN_URL.getValue());
-        vnp_Params.put("vnp_IpAddr", "0:0:0:0:0:0:0:1");
+        vnp_Params.put("vnp_IpAddr", "14.160.87.124:443");
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");

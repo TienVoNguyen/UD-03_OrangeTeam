@@ -18,9 +18,9 @@ public class ShoppingCartController {
     public Result<?> add(@RequestBody CartDTO cartDTO) {
         return Result.success("Thêm sản phẩm vào giỏ hàng thành công!", this.shoppingCartService.add(cartDTO));
     }
-    @PostMapping("/update")
+    @GetMapping("/update")
     public Result<?> update(@RequestParam Long id, @RequestParam Integer qty) {
-        return Result.success("Thêm sản phẩm vào giỏ hàng thành công!", this.shoppingCartService.update(id, qty));
+        return Result.success("Cập nhật số lượng sản phẩm trong giỏ hàng thành công!", this.shoppingCartService.update(id, qty));
     }
     @GetMapping("")
     public Result<?> getCartItems() {

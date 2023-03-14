@@ -1,4 +1,4 @@
-package com.orange.domain.model.GHN;
+package com.orange.domain.model.ghn;
 
 import lombok.Data;
 

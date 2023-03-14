@@ -1,7 +1,7 @@
 package com.orange.services;
 
-import com.orange.domain.model.GHN.GHNProvince;
-import com.orange.domain.model.GHN.GHNShippingOrder;
+import com.orange.domain.model.ghn.GHNProvince;
+import com.orange.domain.model.ghn.GHNShippingOrder;
 import com.orange.payload.request.GHN.GHNCalculateFeeRequest;
 import com.orange.payload.response.GHNCalculateFeeResponse;
 import com.orange.payload.response.GHNShippingOrderResponseWrapper;

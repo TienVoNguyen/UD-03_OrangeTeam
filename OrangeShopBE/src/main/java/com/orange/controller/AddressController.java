@@ -1,6 +1,7 @@
 package com.orange.controller;
 
 
+import com.orange.Utils.AccountUtils;
 import com.orange.common.payload.Page;
 import com.orange.common.payload.Result;
 import com.orange.domain.dto.AddressDTO;
@@ -40,7 +41,7 @@ public class AddressController {
 
     @GetMapping("/by-user")
     public Result<?> getAddressByUser() {
-        Optional<User> user = userRepository.findByUsername(getUsername());
+        Optional<User> user = userRepository.findByUsername(AccountUtils.getUsername());
         if (user.isEmpty()) {
             throw GlobalException.throwException(EntityType.sysUser, ExceptionType.ENTITY_NOT_FOUND, "unauthenticated");
         }
@@ -50,24 +51,36 @@ public class AddressController {
 
     @PostMapping("/add-user-address")
     public Result<?> addAddressForUser(@RequestBody Optional<AddressDTO> addressDTO) {
-        AddressDTO result = new AddressDTO();
         if (addressDTO.isPresent()) {
-            Optional<User> user = userRepository.findByUsername(getUsername());
+            Optional<User> user = userRepository.findByUsername(AccountUtils.getUsername());
             if (user.isPresent()) {
-                result = addressService.addUserAddress(user.get(), addressDTO.get());
+                AddressDTO result = addressService.addUserAddress(user.get(), addressDTO.get());
+                return Result.result(HttpStatus.OK.value(), "Thêm adddress thành công!", result);
             } else {
                 throw GlobalException.throwException(EntityType.sysUser, ExceptionType.UNAUTHENTICATED, "unauthenticated");
             }
         } else {
             throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_NOT_FOUND, "không có address!");
         }
-        return Result.result(HttpStatus.OK.value(), "Lấy dữ liệu adddress thành công!", result);
+    }
+    @GetMapping("/set-default")
+    public Result<?> setDefaultAddressForUser(@RequestParam("addressId") Optional<Long> addressId){
+        if (addressId.isPresent()) {
+            User user = getUser();
+            AddressDTO result = addressService.setDefaultAddressForUser(user, addressId.get());
+            return Result.result(HttpStatus.OK.value(), "Cập nhật địa chỉ mặc định thành công!", result);
+        } else {
+            throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_NOT_FOUND, "không có address!");
+        }
     }
 
-    private static String getUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
-        return username;
+    private User getUser() {
+        Optional<User> user = userRepository.findByUsername(AccountUtils.getUsername());
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw GlobalException.throwException(EntityType.sysUser, ExceptionType.UNAUTHENTICATED, "unauthenticated");
+        }
     }
+
 }

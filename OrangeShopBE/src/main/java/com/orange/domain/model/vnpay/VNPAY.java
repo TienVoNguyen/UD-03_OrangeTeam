@@ -1,4 +1,4 @@
-package com.orange.domain.model.VNPAY;
+package com.orange.domain.model.vnpay;
 
 public enum VNPAY {
     VNPAY_URL("vnp_PayUrl", "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"),

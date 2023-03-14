@@ -1,6 +1,6 @@
 package com.orange.payload.response;
 
-import com.orange.domain.model.GHN.GHNProvince;
+import com.orange.domain.model.ghn.GHNProvince;
 import lombok.Data;
 
 import java.util.List;

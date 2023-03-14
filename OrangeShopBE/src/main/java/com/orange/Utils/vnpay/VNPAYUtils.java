@@ -1,6 +1,6 @@
-package com.orange.Utils.VNPAY;
+package com.orange.Utils.vnpay;
 
-import com.orange.domain.model.VNPAY.VNPAY;
+import com.orange.domain.model.vnpay.VNPAY;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;

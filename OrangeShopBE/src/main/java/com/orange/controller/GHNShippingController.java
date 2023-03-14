@@ -1,11 +1,10 @@
 package com.orange.controller;
 
 import com.orange.common.payload.Result;
-import com.orange.domain.model.GHN.GHNProvince;
+import com.orange.domain.model.ghn.GHNProvince;
 import com.orange.payload.request.GHN.GHNCalculateFeeRequest;
 import com.orange.payload.response.GHNCalculateFeeResponse;
 import com.orange.services.IShippingService;
-import com.orange.services.impl.ShippingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

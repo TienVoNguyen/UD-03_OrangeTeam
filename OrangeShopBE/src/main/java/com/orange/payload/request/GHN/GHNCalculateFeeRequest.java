@@ -2,16 +2,17 @@ package com.orange.payload.request.GHN;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class GHNCalculateFeeRequest {
 
     @JsonProperty("from_district_id")
     private Integer fromDistrictId;
 
     @JsonProperty("service_id")
-    private Integer serviceId;
+    private Integer serviceId = 53320;
 
     @JsonProperty("service_type_id")
     private Integer serviceTypeId;
@@ -23,20 +24,16 @@ public class GHNCalculateFeeRequest {
     private String toWardCode;
 
     @JsonProperty("height")
-    @Value("50")
-    private Integer height;
+    private Integer height = 50;
 
     @JsonProperty("length")
-    @Value("20")
-    private Integer length;
+    private Integer length = 20;
 
     @JsonProperty("weight")
-    @Value("200")
-    private Integer weight;
+    private Integer weight = 200;
 
     @JsonProperty("width")
-    @Value("20")
-    private Integer width;
+    private Integer width = 20;
 
     @JsonProperty("insurance_value")
     private Integer insuranceValue;

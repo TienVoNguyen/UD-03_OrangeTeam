@@ -22,7 +22,7 @@ public class UserAddress extends BaseEntity{
     private Address address;
 
     @Column(name = "is_default")
-    private Byte isDefault;
+    private Boolean isDefault;
 
     @Column(name = "status")
     private Boolean status;

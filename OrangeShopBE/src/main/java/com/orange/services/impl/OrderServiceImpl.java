@@ -1,19 +1,19 @@
 package com.orange.services.impl;
 
+import com.orange.Utils.AccountUtils;
 import com.orange.common.payload.Page;
+import com.orange.domain.dto.OrderDTO;
 import com.orange.domain.dto.OrderViewDTO;
+import com.orange.domain.mapper.IOrderMapper;
 import com.orange.domain.mapper.IOrderViewMapper;
 import com.orange.domain.model.*;
-import com.orange.domain.model.GHN.GHNItem;
-import com.orange.domain.model.GHN.GHNShippingOrder;
+import com.orange.domain.model.ghn.GHNItem;
+import com.orange.domain.model.ghn.GHNShippingOrder;
 import com.orange.exception.*;
-import com.orange.domain.mapper.IOrderMapper;
-import com.orange.domain.dto.OrderDTO;
 import com.orange.payload.request.UpdateOrderStatus;
 import com.orange.repositories.IOrderDetailRepository;
 import com.orange.repositories.IOrderRepository;
 import com.orange.repositories.IProductDetailRepository;
-import com.orange.repositories.IProductRepository;
 import com.orange.services.IOrderService;
 import com.orange.services.IShippingService;
 import lombok.RequiredArgsConstructor;
@@ -43,36 +43,38 @@ public class OrderServiceImpl implements IOrderService {
     public OrderDTO create(OrderDTO dto) {
 
         dto.setOrderStatus(new OrderStatus(Long.valueOf(EOrderStatus.WAIT_FOR_CONFIRMATION.getId())));
-
+        dto.setCreateBy(AccountUtils.getUsername());
+        dto.setCreateDate(new Date().toString());
         Order result = orderRepository.save(orderMapper.toEntity(dto));
         Set<OrderDetail> orderDetails = result.getOrderDetails();
 
-        List<Long> productIds = orderDetails.stream().map(OrderDetail::getProductDetail).map(ProductDetail::getId).collect(Collectors.toList());
+        List<Long> productDetailIds = orderDetails.stream().map(OrderDetail::getProductDetail).map(ProductDetail::getId).collect(Collectors.toList());
 
-        Map<Long, ProductDetail> productDetailMap = productDetailRepository.findAllById(productIds)
+        Map<Long, ProductDetail> productDetailMap = productDetailRepository.findAllById(productDetailIds)
                 .stream()
                 .collect(Collectors.toMap(ProductDetail::getId, Function.identity()));
 
-        List<OrderDetail> updatedOrderDetails = orderDetails.stream().map(orderDetail -> {
-            Long productId = orderDetail.getProductDetail().getId();
-            Integer quantity = orderDetail.getQuantity();
+        List<OrderDetail> updatedOrderDetails = orderDetails.stream()
+                .map(orderDetail -> {
+                    Long productDetailId = orderDetail.getProductDetail().getId();
+                    Integer quantity = orderDetail.getQuantity();
 
-            ProductDetail productDetail = productDetailMap.get(productId);
+                    ProductDetail productDetail = productDetailMap.get(productDetailId);
 
-            if (productDetail == null) {
-                throw new EntityNotFoundException("Không tìm thấy sản phẩm có ID: " + productId);
-            }
+                    if (productDetail == null) {
+                        throw new EntityNotFoundException("Không tìm thấy sản phẩm có ID: " + productDetailId);
+                    }
 
-            if (productDetail.getQuantity() < quantity) {
-                throw new NotEnoughStockException("Số lượng trong kho không đủ");
-            }
+                    if (productDetail.getQuantity() < quantity) {
+                        throw new NotEnoughStockException("Số lượng trong kho không đủ");
+                    }
 
-            productDetail.setQuantity(productDetail.getQuantity() - quantity);
-            orderDetail.setProductDetail(productDetail);
-            orderDetail.setOrder(result);
+                    productDetail.setQuantity(productDetail.getQuantity() - quantity);
+                    orderDetail.setProductDetail(productDetail);
+                    orderDetail.setOrder(result);
 
-            return orderDetail;
-        }).collect(Collectors.toList());
+                    return orderDetail;
+                }).collect(Collectors.toList());
 
         orderDetailRepository.saveAll(updatedOrderDetails);
         productDetailRepository.saveAll(productDetailMap.values());
@@ -130,10 +132,10 @@ public class OrderServiceImpl implements IOrderService {
             if (orderStatus.getOrderStatusId() == EOrderStatus.CONFIRMED.getId()) {
                 GHNShippingOrder ghnShippingOrder = new GHNShippingOrder();
                 List<GHNItem> items = order.getOrderDetails().stream()
-                                .map(od -> GHNItem.builder()
-                                        .name(od.getProductDetail().getProduct().getName())
-                                        .quantity(od.getQuantity())
-                                        .build()).collect(Collectors.toList());
+                        .map(od -> GHNItem.builder()
+                                .name(od.getProductDetail().getProduct().getName())
+                                .quantity(od.getQuantity())
+                                .build()).collect(Collectors.toList());
                 ghnShippingOrder.setTo_name(order.getConsigneeName());
                 ghnShippingOrder.setTo_phone(order.getConsigneePhone());
                 ghnShippingOrder.setTo_address(order.getAddress().getAddressLine1());
@@ -153,6 +155,8 @@ public class OrderServiceImpl implements IOrderService {
                 String shippingCode = this.shippingService.createShippingOrder(ghnShippingOrder).getData().getOrder_code();
                 order.setShippingCode(shippingCode);
             }
+            order.setModifiedBy(AccountUtils.getUsername());
+            order.setModifiedDate(new Date());
             return orderMapper.toDto(this.orderRepository.save(order));
         } catch (DataAccessException e) {
             throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_NOT_FOUND, "Có lỗi xảy ra trong quá trình cập nhật trạng thái");

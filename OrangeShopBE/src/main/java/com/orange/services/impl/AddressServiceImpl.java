@@ -14,8 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,9 +34,10 @@ public class AddressServiceImpl implements IAddressService {
 
     @Override
     public AddressDTO create(AddressDTO dto) {
-        if(findByAddressDTO(dto).isPresent()) {
+        if (findByAddressDTO(dto).isPresent()) {
             throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_ALREADY_EXIST, "Address already exists");
-        };
+        }
+        ;
 
         Address address = checkVillageDistrictCity(dto);
 
@@ -64,7 +67,6 @@ public class AddressServiceImpl implements IAddressService {
 
     @Override
     public List<AddressDTO> fillAddressByUser(Long userId) {
-
         List<Address> result = this.addressRepository.findAddressByUser(userId);
         List<AddressDTO> viewDTOList = addressMapper.toDtoList(result);
         return viewDTOList;
@@ -92,8 +94,34 @@ public class AddressServiceImpl implements IAddressService {
         if (userAddressOptional.isPresent()) {
             throw GlobalException.throwException(EntityType.product, ExceptionType.ENTITY_ALREADY_EXIST, "Address đã tồn tại!");
         }
+        userAddress.setStatus(true);
+        userAddress.setCreateBy(user.getUsername());
+        userAddress.setCreateDate(new Date().toString());
+        userAddress.setIsDefault(false);
         this.userAddressRepository.save(userAddress);
         return addressMapper.toDto(userAddress.getAddress());
+    }
+
+    @Override
+    public AddressDTO setDefaultAddressForUser(User user, Long addressId) {
+        AtomicReference<UserAddress> userAddress = new AtomicReference<>();
+        List<UserAddress> userAddresses = this.userAddressRepository.findUserAddressesByUser_Id(user.getId())
+                .stream()
+                .filter(ua -> (ua.getAddress().getId() == addressId) || ua.getIsDefault())
+                .map(ua -> {
+                    if (ua.getAddress().getId() == addressId) {
+                        ua.setIsDefault(true);
+                        userAddress.set(ua);
+                        return ua;
+                    } else {
+                        ua.setIsDefault(false);
+                        return ua;
+                    }
+                })
+                .toList();
+        this.userAddressRepository.saveAll(userAddresses);
+
+        return this.addressMapper.toDto(userAddress.get().getAddress());
     }
 
     private Address getAddressById(Long id) {
