@@ -1,4 +1,4 @@
-package com.orange.payload.request.GHN;
+package com.orange.payload.request.ghn;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
