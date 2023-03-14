@@ -19,13 +19,10 @@
             </thead>
             <tbody class="align-middle">
               <cart-row
-                v-for="(product, index) in productCart"
+                v-for="(product, index) in cart"
                 :key="index"
                 :index="index"
                 :cart-row="product"
-                @increase="quantityIncrease"
-                @reduce="quantityReduce"
-                @watchCartRow="changeValCartRow"
               />
             </tbody>
           </table>
@@ -63,6 +60,7 @@ import horizontalScroll from 'el-table-horizontal-scroll'
 import userCommon from '@/views/user/Mixin/user-mixin'
 import PageHeader from '@/views/user/component/PageHeader'
 import CartRow from '@/views/user/component/CartRow'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DetailProduct',
@@ -77,6 +75,11 @@ export default {
       color: '',
       quantity: 1
     }
+  },
+  computed: {
+    ...mapGetters([
+      'cart'
+    ])
   },
   methods: {
     quantityReduce(index) {

@@ -23,9 +23,9 @@
         </div>
       </div>
       <div class="card-footer d-flex justify-content-between bg-light border">
-        <el-button type="button" class="linkCard text-dark p-0 border-0 bg-light" @click="viewDetail(product)">
+        <router-link :to="'/product/view-detail/' + productCard.id" type="button" class="linkCard text-dark p-0 border-0 bg-light" @click="viewDetail(product)">
           <i class="fas fa-eye mr-1" style="color: #D19C97" />View Detail
-        </el-button>
+        </router-link>
         <el-button type="button" class="linkCard text-dark p-0 border-0 bg-light" @click="addToCart(productAddToCard, selectedSize, selectedColor)">
           <i class="fas fa-shopping-cart mr-1" style="color: #D19C97" />Add To Cart
         </el-button>
@@ -58,10 +58,13 @@ export default {
       colors: [],
       variationOptions: [],
       productAddToCard: {
-        id: '',
-        name: '',
-        priceSale: 0,
+        productDetailId: '',
+        productName: '',
+        image: '',
+        color: '',
+        size: '',
         priceDefault: 0,
+        price: 0,
         quantity: 1
       }
     }
@@ -75,7 +78,7 @@ export default {
       return require(`@/assets/pictures/${this.productCard.defaultImage}`)
     },
     productPriceSale() {
-      return this.productAddToCard.priceSale === 0 ? this.productCard.productDetails[0].priceSale : this.productAddToCard.priceSale
+      return this.productAddToCard.price === 0 ? this.productCard.productDetails[0].priceSale : this.productAddToCard.price
     },
     productPriceDefault() {
       return this.productAddToCard.priceDefault === 0 ? this.productCard.productDetails[0].priceDefault : this.productAddToCard.priceDefault
@@ -90,13 +93,10 @@ export default {
     }
   },
   created() {
-    console.log(this.productCard)
     this.getProductVariations()
-    this.productAddToCard.name = this.productCard.name
-    this.productAddToCard.priceSale = this.productCard.productDetails[0].priceSale
+    this.productAddToCard.productName = this.productCard.name
+    this.productAddToCard.price = this.productCard.productDetails[0].priceSale
     this.productAddToCard.priceDefault = this.productCard.productDetails[0].priceDefault
-    console.log(1, this.productAddToCard)
-    console.log(2, this.productCard.productDetails[0])
   },
   methods: {
     viewDetail(data) {
@@ -157,9 +157,12 @@ export default {
 
           // Nếu phần tử có cả hai tuỳ chọn này, lấy thông tin chi tiết của phần tử đó
           if (hasSizeM && hasColorBlack) {
-            this.productAddToCard.priceSale = detail.priceSale
+            this.productAddToCard.price = detail.priceSale
             this.productAddToCard.priceDefault = detail.priceDefault
-            this.productAddToCard.id = detail.id
+            this.productAddToCard.productDetailId = detail.id
+            this.productAddToCard.image = detail.images
+            this.productAddToCard.color = this.selectedColor
+            this.productAddToCard.size = this.selectedSize
             break
           }
         }
